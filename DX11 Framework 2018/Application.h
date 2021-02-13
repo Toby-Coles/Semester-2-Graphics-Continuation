@@ -36,7 +36,7 @@ private:
 	ID3D11ShaderResourceView* p_SpecularTexture = nullptr;
 
 	//Update Controls
-	void UpdateShipControlls(float deltaTime);
+	/*void UpdateShipControlls(float deltaTime);*/
 	void UpdateCameraControlls(float deltaTime);
 	
 	ApplicationGraphics* appGFX;

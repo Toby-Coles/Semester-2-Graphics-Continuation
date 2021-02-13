@@ -5,8 +5,7 @@ SceneObject::SceneObject (ApplicationGraphics* graphics) {
 	
 	this->appGFX = graphics;
 
-	//ID3D11Device* device = appGFX->GetDevice();
-	//mMeshData = OBJLoader::Load(filepath, this->_pd3dDevice, false);
+
 
 	Initialise();
 
@@ -17,7 +16,6 @@ SceneObject::SceneObject() {
 
 	Initialise();
 	
-
 }
 
 SceneObject::~SceneObject()
@@ -28,6 +26,7 @@ void SceneObject::Initialise()
 {
 	_transform = new Transform();
 	_appearance = new Appearance();
+	_particleModel = new ParticleModel(_transform->GetPosition().x, _transform->GetPosition().y, _transform->GetPosition().z);
 
 
 	//Set initial Values
@@ -43,30 +42,6 @@ void SceneObject::Initialise()
 
 
 }
-
-//void SceneObject::GenerateTexture(wchar_t* texturePath, ID3D11Device* device)
-//{
-//	ID3D11ShaderResourceView* texture;
-//	LoadTexture(texturePath, &texture, device);
-//	mTextures.push_back(texture);
-//}
-//
-//void SceneObject::LoadModelMesh(char* filepath, ID3D11Device* device)
-//{
-//	//mMeshadata = incomingdata
-//	mMeshData = OBJLoader::Load(filepath, device, false);
-//
-//}
-
-
-
-//HRESULT SceneObject::LoadTexture(wchar_t* path, ID3D11ShaderResourceView** texture, ID3D11Device* device)
-//{
-//	return CreateDDSTextureFromFile(device, path, nullptr, texture); 
-//
-//}
-
-
 
 void SceneObject::Draw()
 {
@@ -94,8 +69,9 @@ void SceneObject::Draw(ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer,UIN
 	appGFX->Draw(indexCount);
 }
 
-void SceneObject::Update()
+void SceneObject::Update(float deltaTime)
 {
+	_particleModel->Update(deltaTime);
 	_transform->UpdateTransforms();
 }
 

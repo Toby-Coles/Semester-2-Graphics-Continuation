@@ -10,6 +10,7 @@
 //#include "Application.h"
 #include "Transform.h"
 #include "Appearance.h"
+#include "ParticleModel.h"
 
 #include <vector>
 
@@ -22,35 +23,22 @@ public:
 	SceneObject();
 	~SceneObject();
 
-	/*void GenerateTexture(wchar_t* texturePath, ID3D11Device* device);
-	void LoadModelMesh(char* filepath, ID3D11Device* device);*/
-	
 	
 	virtual void Draw();
 	virtual void Draw(ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount);
-	void Update(); 
+	void Update(float deltaTime); 
 	void Initialise();
 
-	//HRESULT LoadTexture(wchar_t* path, ID3D11ShaderResourceView** texture, ID3D11Device* device);
 	ApplicationGraphics* appGFX;
 
 	Transform* _transform;
 	Appearance* _appearance;
-private:
+	ParticleModel* _particleModel;
 	
+private:
+	float _deltaTime;
 
 protected:
 	
-
-
-	//MeshData mMeshData;
-
-	
-
-	//std::vector<ID3D11ShaderResourceView*> mTextures;
-
-
-	
-
 };
 

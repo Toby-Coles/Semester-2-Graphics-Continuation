@@ -8,6 +8,7 @@
 #include "OBJLoader.h"
 #include "ApplicationGraphics.h"
 //#include "Application.h"
+#include "Transform.h"
 
 #include <vector>
 
@@ -20,22 +21,10 @@ public:
 	SceneObject();
 	~SceneObject();
 
-	void SetPosition(XMFLOAT3 position);
-	void SetRotation(XMFLOAT3 rotation);
-	void SetScale(XMFLOAT3 scale);
-	void SetScale(float x, float y, float z);
-	void SetTransform(XMFLOAT4X4 transform);
-	void SetTransform(XMMATRIX transform);
 	void GenerateTexture(wchar_t* texturePath, ID3D11Device* device);
 	void LoadModelMesh(char* filepath, ID3D11Device* device);
 	//void SetDevice(ID3D11Device* device);
-	XMMATRIX UpdateTransforms();
-
-	XMFLOAT4X4 GetTransform();
-	XMFLOAT3 GetPosition();
-	XMFLOAT3 GetRotation();
-	XMFLOAT3 GetScale();
-
+	
 	virtual void Draw();
 	virtual void Draw(ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount);
 	void Update(); 
@@ -44,16 +33,17 @@ public:
 	HRESULT LoadTexture(wchar_t* path, ID3D11ShaderResourceView** texture, ID3D11Device* device);
 	ApplicationGraphics* appGFX;
 
+	Transform* _transform;
 private:
 	//ID3D11Device* _pd3dDevice;
 
 protected:
+	
+
+
 	MeshData mMeshData;
 
-	XMFLOAT4X4 mTransform;
-	XMFLOAT3 mPosition;
-	XMFLOAT3 mRotation;
-	XMFLOAT3 mScale;
+	
 
 	std::vector<ID3D11ShaderResourceView*> mTextures;
 

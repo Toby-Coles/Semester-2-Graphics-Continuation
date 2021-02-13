@@ -26,11 +26,12 @@ SceneObject::~SceneObject()
 
 void SceneObject::Initialise()
 {
+	_transform = new Transform();
+
+
 	//Set initial Values
-	XMStoreFloat4x4(&mTransform, XMMatrixIdentity());
-	SetPosition(XMFLOAT3(0.0f, 0.0f, 0.0f));
-	SetRotation(XMFLOAT3(0.0f, 0.0f, 0.0f));
-	SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
+	XMStoreFloat4x4(&_transform->GetTransform() , XMMatrixIdentity());
+	
 	
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
@@ -64,60 +65,7 @@ HRESULT SceneObject::LoadTexture(wchar_t* path, ID3D11ShaderResourceView** textu
 
 }
 
-void SceneObject:: SetPosition(XMFLOAT3 position) {
-	mPosition = position;
 
-}
-
-void SceneObject::SetRotation(XMFLOAT3 rotation)
-{
-	mRotation = rotation;
-}
-
-void SceneObject::SetScale(XMFLOAT3 scale)
-{
-	mScale = scale;
-}
-
-void SceneObject::SetScale(float x, float y, float z)
-{
-	mScale.x = x;
-	mScale.y = y;
-	mScale.z = z;
-
-}
-
-void SceneObject::SetTransform(XMFLOAT4X4 transform)
-{
-	mTransform = transform;
-}
-
-void SceneObject::SetTransform(XMMATRIX transform)
-{
-	XMStoreFloat4x4(&mTransform, transform);
-}
-
-
-
-XMFLOAT4X4 SceneObject::GetTransform()
-{
-	return mTransform;
-}
-
-XMFLOAT3 SceneObject::GetPosition()
-{
-	return mPosition;
-}
-
-XMFLOAT3 SceneObject::GetRotation()
-{
-	return mRotation;
-}
-
-XMFLOAT3 SceneObject::GetScale()
-{
-	return mScale;
-}
 
 void SceneObject::Draw()
 {
@@ -134,35 +82,23 @@ void SceneObject::Draw()
 	
 	//appGFX->InitShadersAndInputLayout();
 	
-	appGFX->UpdateConstantBufferVariables(mTransform);
+	appGFX->UpdateConstantBufferVariables(_transform->GetTransform());
 	appGFX->Draw(mMeshData.IndexCount);
 }
 void SceneObject::Draw(ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer,UINT indexCount){
 	appGFX->SetIndexBuffer(indexBuffer);
 	appGFX->SetVertexBuffer(vertexBuffer);
-	appGFX->UpdateConstantBufferVariables(mTransform);
+	appGFX->UpdateConstantBufferVariables(_transform->GetTransform());
 
 	appGFX->Draw(indexCount);
 }
 
 void SceneObject::Update()
 {
-	UpdateTransforms();
+	_transform->UpdateTransforms();
 }
 
-//Apply and update object transforms
-XMMATRIX SceneObject::UpdateTransforms() {
 
-	XMMATRIX transform = XMLoadFloat4x4(&mTransform);
-	XMMATRIX scale = XMMatrixScaling(mScale.x, mScale.y, mScale.z);
-	XMMATRIX position = XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z);
-	XMMATRIX rotation = XMMatrixRotationRollPitchYaw(mRotation.x, mRotation.y, mRotation.z);
-	XMMATRIX finalTransform = XMMatrixMultiply(scale, position) * rotation;
-
-	XMStoreFloat4x4(&mTransform, finalTransform);
-	return finalTransform;
-
-}
 
 
 

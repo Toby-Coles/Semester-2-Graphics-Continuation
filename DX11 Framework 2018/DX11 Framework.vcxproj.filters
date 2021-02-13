@@ -18,6 +18,9 @@
     <Filter Include="Framework Tools">
       <UniqueIdentifier>{d662af9f-9b7f-42ca-9851-4630640a367c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object Parameters">
+      <UniqueIdentifier>{391eed97-0edc-47ca-88c7-1f3ed650be04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imconfig.h">
@@ -76,6 +79,12 @@
     <ClInclude Include="Vector.h">
       <Filter>Framework Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Object Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleModel.h">
+      <Filter>Object Parameters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -127,6 +136,12 @@
     </ClCompile>
     <ClCompile Include="Vector.cpp">
       <Filter>Framework Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Object Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleModel.cpp">
+      <Filter>Object Parameters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

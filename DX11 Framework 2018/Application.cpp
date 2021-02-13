@@ -44,36 +44,36 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	//Create the object for the crate cube in the scene 
 	_cube = new SceneObject(appGFX);
-	_cube->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
+	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	_cube->_transform->SetPosition(XMFLOAT3(15.3f, 0.2f, 0.1f));
 	_cube->_transform->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
 	_cube->_transform->SetRotation(XMFLOAT3(0.1f, 0.1f, 0.1f));
-	_cube->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
-	_cube->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
+	_cube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
+	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_cube);
 
 	//Create the earth object in the scene
 	_earth = new SceneObject(appGFX);
-	_earth->LoadModelMesh("Models/sphere2.obj", appGFX->GetDevice());
+	_earth->_appearance->LoadModelMesh("Models/sphere2.obj", appGFX->GetDevice());
 	_earth->_transform->SetPosition(XMFLOAT3(0.0f, 0.0f, 0.0f));
 	_earth->_transform->SetScale(XMFLOAT3(10.0f, 10.0f, 10.0f));
-	_earth->GenerateTexture(L"Textures/earth_color.dds", appGFX->GetDevice());
-	_earth->GenerateTexture(L"Textures/earth_spec.dds", appGFX->GetDevice());
-	_earth->GenerateTexture(L"Textures/earth_night.dds", appGFX->GetDevice());
+	_earth->_appearance->GenerateTexture(L"Textures/earth_color.dds", appGFX->GetDevice());
+	_earth->_appearance->GenerateTexture(L"Textures/earth_spec.dds", appGFX->GetDevice());
+	_earth->_appearance->GenerateTexture(L"Textures/earth_night.dds", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_earth);
 
 	_ship = new SceneObject(appGFX);
-	_ship->LoadModelMesh("Models/userModel.obj", appGFX->GetDevice());
+	_ship->_appearance->LoadModelMesh("Models/userModel.obj", appGFX->GetDevice());
 	_ship->_transform->SetPosition(XMFLOAT3(0.0f, 0.0f, - 25.0f));
 	_ship->_transform->SetScale(XMFLOAT3(0.3f, 0.3f, 0.3f));
-	_ship->GenerateTexture(L"Textures/shipTex.dss", appGFX->GetDevice());
+	_ship->_appearance->GenerateTexture(L"Textures/shipTex.dss", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_ship);
 
 	_shipPlayer = new SceneObject(appGFX);
-	_shipPlayer->LoadModelMesh("Models/userModelRotated.obj", appGFX->GetDevice());
+	_shipPlayer->_appearance->LoadModelMesh("Models/userModelRotated.obj", appGFX->GetDevice());
 	_shipPlayer->_transform->SetPosition(XMFLOAT3(0.0f, 0.0f, 40.0f));
 	_shipPlayer->_transform->SetScale(XMFLOAT3(0.3f, 0.3f, 0.3f));
-	_shipPlayer->GenerateTexture(L"Textures/shipTex.dss", appGFX->GetDevice());
+	_shipPlayer->_appearance->GenerateTexture(L"Textures/shipTex.dss", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_shipPlayer);
 
 	_camera2 = new Camera();
@@ -97,17 +97,17 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	
 	//Create the object and initialise the variables for the skybox(skysphere)
 	_skyMap = new SceneObject(appGFX);
-	_skyMap->LoadModelMesh("Models/sphere2.obj", appGFX->GetDevice());
+	_skyMap->_appearance->LoadModelMesh("Models/sphere2.obj", appGFX->GetDevice());
 	_skyMap->_transform->SetPosition(XMFLOAT3(0.0f, 0.0f, 5.5f));
 	_skyMap->_transform->SetScale(XMFLOAT3(100.0f, 100.0f, 100.0f));
 	_skyMap->_transform->SetRotation(XMFLOAT3(0.0f, 0.0f, 0.0f));
-	_skyMap->GenerateTexture(L"Textures/stars_map.dds", appGFX->GetDevice());
+	_skyMap->_appearance->GenerateTexture(L"Textures/stars_map.dds", appGFX->GetDevice());
 
 	//Creates the ground plane
 	_plane = new GroundPlane(appGFX);
 	_plane->GeneratePlane(30.0f, 30.0f, 8, 8);
 	_plane->_transform->SetPosition (XMFLOAT3(0.0f, -10.0f, 0.0f));
-	_plane->GenerateTexture(L"Textures/planeSurface.dds", appGFX->GetDevice());
+	_plane->_appearance->GenerateTexture(L"Textures/planeSurface.dds", appGFX->GetDevice());
 	_showGridPlane = false;
 	
 	//Initialise the timer in the program

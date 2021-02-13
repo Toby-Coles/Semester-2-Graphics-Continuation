@@ -27,6 +27,7 @@ SceneObject::~SceneObject()
 void SceneObject::Initialise()
 {
 	_transform = new Transform();
+	_appearance = new Appearance();
 
 
 	//Set initial Values
@@ -43,39 +44,39 @@ void SceneObject::Initialise()
 
 }
 
-void SceneObject::GenerateTexture(wchar_t* texturePath, ID3D11Device* device)
-{
-	ID3D11ShaderResourceView* texture;
-	LoadTexture(texturePath, &texture, device);
-	mTextures.push_back(texture);
-}
+//void SceneObject::GenerateTexture(wchar_t* texturePath, ID3D11Device* device)
+//{
+//	ID3D11ShaderResourceView* texture;
+//	LoadTexture(texturePath, &texture, device);
+//	mTextures.push_back(texture);
+//}
+//
+//void SceneObject::LoadModelMesh(char* filepath, ID3D11Device* device)
+//{
+//	//mMeshadata = incomingdata
+//	mMeshData = OBJLoader::Load(filepath, device, false);
+//
+//}
 
-void SceneObject::LoadModelMesh(char* filepath, ID3D11Device* device)
-{
-	//mMeshadata = incomingdata
-	mMeshData = OBJLoader::Load(filepath, device, false);
-
-}
 
 
-
-HRESULT SceneObject::LoadTexture(wchar_t* path, ID3D11ShaderResourceView** texture, ID3D11Device* device)
-{
-	return CreateDDSTextureFromFile(device, path, nullptr, texture); 
-
-}
+//HRESULT SceneObject::LoadTexture(wchar_t* path, ID3D11ShaderResourceView** texture, ID3D11Device* device)
+//{
+//	return CreateDDSTextureFromFile(device, path, nullptr, texture); 
+//
+//}
 
 
 
 void SceneObject::Draw()
 {
 	
-	appGFX->SetIndexBuffer(mMeshData.IndexBuffer);
-	appGFX->SetVertexBuffer(mMeshData.VertexBuffer);
+	appGFX->SetIndexBuffer(_appearance->GetMeshData().IndexBuffer);
+	appGFX->SetVertexBuffer(_appearance->GetMeshData().VertexBuffer);
 
-	for (int i = 0; i < mTextures.size(); i++)
+	for (int i = 0; i < _appearance->GetTextureVector().size(); i++)
 	{
-		appGFX->BindTextures(i, 1, mTextures);
+		appGFX->BindTextures(i, 1, _appearance->GetTextureVector());
 	}
 	
 	
@@ -83,7 +84,7 @@ void SceneObject::Draw()
 	//appGFX->InitShadersAndInputLayout();
 	
 	appGFX->UpdateConstantBufferVariables(_transform->GetTransform());
-	appGFX->Draw(mMeshData.IndexCount);
+	appGFX->Draw(_appearance->GetMeshData().IndexCount);
 }
 void SceneObject::Draw(ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer,UINT indexCount){
 	appGFX->SetIndexBuffer(indexBuffer);

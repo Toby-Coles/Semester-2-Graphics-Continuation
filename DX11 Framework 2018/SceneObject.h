@@ -4,11 +4,12 @@
 #include <d3dcompiler.h>
 #include <directxmath.h>
 #include <directxcolors.h>
-#include "DDSTextureLoader.h"
-#include "OBJLoader.h"
+//#include "DDSTextureLoader.h"
+//#include "OBJLoader.h"
 #include "ApplicationGraphics.h"
 //#include "Application.h"
 #include "Transform.h"
+#include "Appearance.h"
 
 #include <vector>
 
@@ -21,31 +22,32 @@ public:
 	SceneObject();
 	~SceneObject();
 
-	void GenerateTexture(wchar_t* texturePath, ID3D11Device* device);
-	void LoadModelMesh(char* filepath, ID3D11Device* device);
-	//void SetDevice(ID3D11Device* device);
+	/*void GenerateTexture(wchar_t* texturePath, ID3D11Device* device);
+	void LoadModelMesh(char* filepath, ID3D11Device* device);*/
+	
 	
 	virtual void Draw();
 	virtual void Draw(ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer, UINT indexCount);
 	void Update(); 
 	void Initialise();
 
-	HRESULT LoadTexture(wchar_t* path, ID3D11ShaderResourceView** texture, ID3D11Device* device);
+	//HRESULT LoadTexture(wchar_t* path, ID3D11ShaderResourceView** texture, ID3D11Device* device);
 	ApplicationGraphics* appGFX;
 
 	Transform* _transform;
+	Appearance* _appearance;
 private:
-	//ID3D11Device* _pd3dDevice;
+	
 
 protected:
 	
 
 
-	MeshData mMeshData;
+	//MeshData mMeshData;
 
 	
 
-	std::vector<ID3D11ShaderResourceView*> mTextures;
+	//std::vector<ID3D11ShaderResourceView*> mTextures;
 
 
 	

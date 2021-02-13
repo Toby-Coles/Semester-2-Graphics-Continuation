@@ -85,6 +85,9 @@
     <ClInclude Include="ParticleModel.h">
       <Filter>Object Parameters</Filter>
     </ClInclude>
+    <ClInclude Include="Appearance.h">
+      <Filter>Object Parameters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -141,6 +144,9 @@
       <Filter>Object Parameters</Filter>
     </ClCompile>
     <ClCompile Include="ParticleModel.cpp">
+      <Filter>Object Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="Appearance.cpp">
       <Filter>Object Parameters</Filter>
     </ClCompile>
   </ItemGroup>

@@ -8,12 +8,12 @@ public:
 	ParticleModel(float x, float y, float z);
 	~ParticleModel();
 
-	void MoveConstVelocity();
+	void MoveConstVelocity(float deltaTime);
 
-	void MoveConstAccelleration();
+	Vector MoveConstAccelleration(Vector* position, float deltaTime);
 
-	Vector GetVelocity();
-	Vector SetVelocity();
+	Vector GetVelocity() const { return _velocity; }
+
 	void Update(float deltaTime);
 	
 protected:
@@ -25,7 +25,7 @@ protected:
 
 	
 private:
-
+	Vector* _vector;
 };
 
 

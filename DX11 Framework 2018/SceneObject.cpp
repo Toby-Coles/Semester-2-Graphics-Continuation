@@ -26,7 +26,7 @@ void SceneObject::Initialise()
 {
 	_transform = new Transform();
 	_appearance = new Appearance();
-	_particleModel = new ParticleModel(_transform->GetPosition().x, _transform->GetPosition().y, _transform->GetPosition().z);
+	_particleModel = new ParticleModel(_transform->GetPosition()->x, _transform->GetPosition()->y, _transform->GetPosition()->z);
 
 
 	//Set initial Values

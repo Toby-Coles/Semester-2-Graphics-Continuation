@@ -23,7 +23,7 @@ public:
 	Vector operator/(float value); //Vector division
 	Vector& operator/=(float value); //Assign result from division
 
-	Vector& operator=(const Vector& vec);
+	//Vector& operator=(const Vector& vec);
 
 	// ====== Vector Methods ====== //
 	float DotProduct(Vector& vec1, Vector& vec2);

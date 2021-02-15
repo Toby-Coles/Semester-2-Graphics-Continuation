@@ -2,9 +2,16 @@
 
 Transform::Transform()
 {
-	SetPosition(XMFLOAT3(0.0f, 0.0f, 0.0f));
-	SetRotation(XMFLOAT3(0.0f, 0.0f, 0.0f));
-	SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
+	//mPosition = new Vector();
+	//mRotation = new Vector();
+	//mScale = new Vector();
+
+	mPosition = Vector(0, 0, 0);
+	mScale = Vector(0, 0, 0);
+		mRotation = Vector(0, 0, 0);
+
+	SetScale(1.0f, 1.0f, 1.0f);
+	UpdateTransforms();
 }
 
 Transform::~Transform()
@@ -12,17 +19,31 @@ Transform::~Transform()
 }
 
 
-void Transform::SetPosition(XMFLOAT3 position) {
+void Transform::SetPosition(Vector position) {
 	mPosition = position;
 
 }
 
-void Transform::SetRotation(XMFLOAT3 rotation)
+void Transform::SetPosition(float x, float y, float z)
+{
+	mPosition.x = x; mPosition.y = y; mPosition.z = z;
+}
+
+void Transform::SetRotation(Vector rotation)
 {
 	mRotation = rotation;
 }
+void Transform::SetRotation(float x, float y, float z) {
 
-void Transform::SetScale(XMFLOAT3 scale)
+	mRotation.x = x;
+
+	mRotation.y = y;
+
+	mRotation.z = z;
+	
+}
+
+void Transform::SetScale(Vector scale)
 {
 	mScale = scale;
 }
@@ -52,19 +73,19 @@ XMFLOAT4X4 Transform::GetTransform()
 	return mTransform;
 }
 
-XMFLOAT3 Transform::GetPosition()
+Vector* Transform::GetPosition()
 {
-	return mPosition;
+	return &mPosition;
 }
 
-XMFLOAT3 Transform::GetRotation()
+Vector* Transform::GetRotation()
 {
-	return mRotation;
+	return &mRotation;
 }
 
-XMFLOAT3 Transform::GetScale()
+Vector* Transform::GetScale()
 {
-	return mScale;
+	return &mScale;
 }
 
 //Apply and update object transforms

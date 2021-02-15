@@ -56,9 +56,9 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	//Create the object for the crate cube in the scene 
 	_cube = new SceneObject(appGFX);
 	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
-	_cube->_transform->SetPosition(XMFLOAT3(15.3f, 0.2f, 0.1f));
-	_cube->_transform->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
-	_cube->_transform->SetRotation(XMFLOAT3(0.1f, 0.1f, 0.1f));
+	_cube->_transform->SetPosition(0.3f, 0.2f, 0.1f);
+	_cube->_transform->SetScale(1.0f, 1.0f, 1.0f);
+	_cube->_transform->SetRotation(0.1f, 0.1f, 0.1f);
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_cube);
@@ -98,15 +98,15 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	//Create the object and initialise the variables for the skybox(skysphere)
 	_skyMap = new SceneObject(appGFX);
 	_skyMap->_appearance->LoadModelMesh("Models/sphere2.obj", appGFX->GetDevice());
-	_skyMap->_transform->SetPosition(XMFLOAT3(0.0f, 0.0f, 5.5f));
-	_skyMap->_transform->SetScale(XMFLOAT3(100.0f, 100.0f, 100.0f));
-	_skyMap->_transform->SetRotation(XMFLOAT3(0.0f, 0.0f, 0.0f));
+	_skyMap->_transform->SetPosition(0.0f, 0.0f, 5.5f);
+	_skyMap->_transform->SetScale(100.0f, 100.0f, 100.0f);
+	_skyMap->_transform->SetRotation(0.0f, 0.0f, 0.0f);
 	_skyMap->_appearance->GenerateTexture(L"Textures/stars_map.dds", appGFX->GetDevice());
 
 	//Creates the ground plane
 	_plane = new GroundPlane(appGFX);
 	_plane->GeneratePlane(30.0f, 30.0f, 8, 8);
-	_plane->_transform->SetPosition (XMFLOAT3(0.0f, -10.0f, 0.0f));
+	_plane->_transform->SetPosition (0.0f, -10.0f, 0.0f);
 	_plane->_appearance->GenerateTexture(L"Textures/planeSurface.dds", appGFX->GetDevice());
 	_showGridPlane = true;
 	
@@ -324,7 +324,7 @@ void Application::Update()
 	//Update Scene Objects
 	for each (SceneObject* object in _worldSceneObjects)
 	{
-		object->Update();
+		object->Update(deltaTime);
 	}
 
 	//Set camera 2/'s position to the ship object with a reletive offset
@@ -337,10 +337,10 @@ void Application::Update()
 	//_ship->_transform->SetRotation(XMFLOAT3(0.0f, _rotation, 0.0f));
 
 	//Constantly sets the skymaps position reletive to the active camera to give the illusion of it never moving
-	_skyMap->_transform->SetPosition(appGFX->GetCurrentCamera()->GetCameraPosition());
-	_skyMap->Update();
+	_skyMap->_transform->SetPosition(appGFX->GetCurrentCamera()->GetCameraPosition().x, appGFX->GetCurrentCamera()->GetCameraPosition().y, appGFX->GetCurrentCamera()->GetCameraPosition().z);
+	_skyMap->Update(deltaTime);
 
-	_plane->Update();
+	_plane->Update(deltaTime);
 
 	_isWireFrame = appGFX->UpdateWireFrame();
 
@@ -351,6 +351,12 @@ void Application::Update()
 	/*UpdateShipControlls(deltaTime);*/
 	
 }
+void Application::UpdateObjectControlls(float deltaTime) {
+	if (GetAsyncKeyState('UP') & 0x8000) _cube->_transform->SetPosition(_cube->_particleModel->MoveConstAccelleration(_cube->_transform->GetPosition(), deltaTime));
+
+}
+
+
 
 //void Application::UpdateShipControlls(float deltaTime) {
 //	XMFLOAT3 shipPosition = _shipPlayer->_transform->GetPosition();
@@ -394,20 +400,22 @@ void Application::UpdateCameraControlls(float deltaTime)
 	//Camera controlls for W, A, S and D
 
 	//W - S
-	if (GetAsyncKeyState('W')) _camera1->MoveFowardBack(10.0f * deltaTime);
-	else if (GetAsyncKeyState('S')) _camera1->MoveFowardBack(-10.0f * deltaTime);
+	if (GetAsyncKeyState('W' ) & 0x8000) _camera1->MoveFowardBack(10.0f * deltaTime);
+	else if (GetAsyncKeyState('S') & 0x8000) _camera1->MoveFowardBack(-10.0f * deltaTime);
 	
 	//A - D
-	if (GetAsyncKeyState('A')) _camera1->Strafe(-10.0f * deltaTime);
-	else if (GetAsyncKeyState('D')) _camera1->Strafe(10.0f * deltaTime);
+	if (GetAsyncKeyState('A') & 0x8000) _camera1->Strafe(-10.0f * deltaTime);
+	else if (GetAsyncKeyState('D') & 0x8000) _camera1->Strafe(10.0f * deltaTime);
 	
 	//Q-E
-	if (GetAsyncKeyState('Q')) _camera1->RotateY(-5.0f * deltaTime);
-	else if (GetAsyncKeyState('E')) _camera1->RotateY(5.0f * deltaTime);
+	if (GetAsyncKeyState('Q') & 0x8000) _camera1->RotateY(-5.0f * deltaTime);
+	else if (GetAsyncKeyState('E') & 0x8000) _camera1->RotateY(5.0f * deltaTime);
 	
 	//R-F
-	if (GetAsyncKeyState('R')) _camera1->Pitch(-5.0f * deltaTime);
-	else if (GetAsyncKeyState('F')) _camera1->Pitch(5.0f * deltaTime);
+	if (GetAsyncKeyState('R') & 0x8000) _camera1->Pitch(-5.0f * deltaTime);
+	else if (GetAsyncKeyState('F') & 0x8000) _camera1->Pitch(5.0f * deltaTime);
+
+
 
 	// ================= Camera Selection ================= //
 
@@ -467,7 +475,7 @@ void Application::ShowSceneUI()
 		}
 	}
 
-	XMFLOAT3 planeScale = _plane->_transform->GetScale();
+	XMFLOAT3 planeScale = XMFLOAT3(_plane->_transform->GetScale()->x, _plane->_transform->GetScale()->y, _plane->_transform->GetScale()->z);
 
 
 	ImGui::SliderFloat("Grid Plane Scale X", &planeScale.x, 0.0f, 50.0f);
@@ -475,7 +483,7 @@ void Application::ShowSceneUI()
 	ImGui::SliderFloat("Grid Plane Scale Z", &planeScale.z, 0.0f, 50.0f);
 	ImGui::End();
 
-	_plane->_transform->SetScale(planeScale);
+	_plane->_transform->SetScale(planeScale.x, planeScale.y, planeScale.z);
 	ImGui::Begin("Controls");
 	ImGui::Text("===/ Camera \===");
 	ImGui::Text("W: Fly Fowards");

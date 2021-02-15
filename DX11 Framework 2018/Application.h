@@ -17,6 +17,7 @@
 #include "GroundPlane.h"
 #include "SetUpGUI.h"
 
+
 using namespace DirectX;
 
 class Application
@@ -38,6 +39,7 @@ private:
 	//Update Controls
 	/*void UpdateShipControlls(float deltaTime);*/
 	void UpdateCameraControlls(float deltaTime);
+	void UpdateObjectControlls(float deltaTime);
 	
 	ApplicationGraphics* appGFX;
 	SceneObject* _skyMap;

@@ -353,11 +353,14 @@ void Application::Update()
 	
 }
 void Application::UpdateObjectControlls(float deltaTime) {
-	//if (GetAsyncKeyState('T') & 0x8000) _cube->_transform->SetPosition(_cube->_particleModel->MoveConstVelocity(_cube->_transform->GetPosition(), deltaTime));
+	
 	if (GetAsyncKeyState('T')) {
-		//_cube->_transform->SetPosition(_cube->_particleModel->MoveConstAccelleration(_cube->_transform->GetPosition(), deltaTime));
-		_cube->_transform->SetPosition(_cube->_particleModel->MoveConstVelocity(_cube->_transform->GetPosition(), deltaTime));
-
+		
+		_cube->_particleModel->MoveConstVelocity(deltaTime);
+	}
+	if (GetAsyncKeyState('Y')) {
+		
+		_cube->_particleModel->MoveConstAccelleration(deltaTime);
 	}
 	
 }

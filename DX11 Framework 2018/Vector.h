@@ -4,24 +4,25 @@ class Vector
 {
 public:
 
-	float x, y, z;
+	float _x, _y, _z;
 
 	//Constructors
 	Vector();
 	Vector(float x, float y, float z);
 
+
 	// ====== Mathematical Methods ====== //
 	Vector operator+(const Vector& vec); // Vector Addition
-	Vector& operator+=(const Vector& vec); // Assign result from addition
+	void operator+=(const Vector& vec); // Assign result from addition
 
 	Vector operator-(const Vector& vec); // Vector Subtraction
-	Vector& operator-=(const Vector& vec); // Assign result from subtraction
+	void operator-=(const Vector& vec); // Assign result from subtraction
 
 	Vector operator*(float value); //Vector multiplication
-	Vector& operator*=(float value); //Assign result from multiplication
+	void operator*=(float value); //Assign result from multiplication
 
 	Vector operator/(float value); //Vector division
-	Vector& operator/=(float value); //Assign result from division
+	void operator/=(float value); //Assign result from division
 
 	//Vector& operator=(const Vector& vec);
 

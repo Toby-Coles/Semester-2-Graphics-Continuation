@@ -346,14 +346,20 @@ void Application::Update()
 
 	//Updates all camera control inputs
 	UpdateCameraControlls(deltaTime);
+	UpdateObjectControlls(deltaTime);
 
 	//Updates ship control inputs
 	/*UpdateShipControlls(deltaTime);*/
 	
 }
 void Application::UpdateObjectControlls(float deltaTime) {
-	if (GetAsyncKeyState('UP') & 0x8000) _cube->_transform->SetPosition(_cube->_particleModel->MoveConstAccelleration(_cube->_transform->GetPosition(), deltaTime));
+	//if (GetAsyncKeyState('T') & 0x8000) _cube->_transform->SetPosition(_cube->_particleModel->MoveConstVelocity(_cube->_transform->GetPosition(), deltaTime));
+	if (GetAsyncKeyState('T')) {
+		//_cube->_transform->SetPosition(_cube->_particleModel->MoveConstAccelleration(_cube->_transform->GetPosition(), deltaTime));
+		_cube->_transform->SetPosition(_cube->_particleModel->MoveConstVelocity(_cube->_transform->GetPosition(), deltaTime));
 
+	}
+	
 }
 
 
@@ -475,7 +481,7 @@ void Application::ShowSceneUI()
 		}
 	}
 
-	XMFLOAT3 planeScale = XMFLOAT3(_plane->_transform->GetScale()->x, _plane->_transform->GetScale()->y, _plane->_transform->GetScale()->z);
+	XMFLOAT3 planeScale = XMFLOAT3(_plane->_transform->GetScale()->_x, _plane->_transform->GetScale()->_y, _plane->_transform->GetScale()->_z);
 
 
 	ImGui::SliderFloat("Grid Plane Scale X", &planeScale.x, 0.0f, 50.0f);

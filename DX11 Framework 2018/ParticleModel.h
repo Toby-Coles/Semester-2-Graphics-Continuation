@@ -5,12 +5,12 @@
 class ParticleModel
 {
 public:
-	ParticleModel(float x, float y, float z);
+	ParticleModel();
 	~ParticleModel();
 
-	void MoveConstVelocity(float deltaTime);
+	Vector MoveConstVelocity(Vector* position, float deltaTime);
 
-	Vector MoveConstAccelleration(Vector* position, float deltaTime);
+	//Vector MoveConstAccelleration(Vector* position, float deltaTime);
 
 	Vector GetVelocity() const { return _velocity; }
 

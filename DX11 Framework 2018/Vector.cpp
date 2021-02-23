@@ -4,70 +4,76 @@
 
 Vector::Vector()
 {
-	x = 0.0f;
-	y = 0.0f;
-	z = 0.0f;
+	_x = 0.0f;
+	_y = 0.0f;
+	_z = 0.0f;
 }
 
-Vector::Vector(float x, float y, float z)
-{
+Vector::Vector(float x, float y, float z) {
+	_x = x;
+	_y = y;
+	_z = z;
+
+
 }
+
 
 // ====== Addition ====== //
 Vector Vector::operator+(const Vector& vec)
 {
-	return Vector(x + vec.x, y + vec.y, z + vec.z);
+	return Vector(_x + vec._x, _y + vec._y, _z + vec._z);
 }
 
-Vector& Vector::operator+=(const Vector& vec)
+void Vector::operator+=(const Vector& vec)
 {
-	x += vec.x;
-	y += vec.y;
-	z += vec.z;
-	return *this;
+	_x += vec._x;
+	_y += vec._y;
+	_z += vec._z;
+	
 
 }
 
 // ====== Subtraction ====== //
 Vector Vector::operator-(const Vector& vec)
 {
-	return Vector(x - vec.x, y - vec.y, z - vec.z);
+	return Vector(_x - vec._x, _y - vec._y, _z - vec._z);
 }
 
-Vector& Vector::operator-=(const Vector& vec)
+void Vector::operator-=(const Vector& vec)
 {
-	x -= vec.x;
-	y -= vec.y;
-	z -= vec.z;
-	return *this;
+	_x -= vec._x;
+	_y -= vec._y;
+	_z -= vec._z;
+
 }
 
+// ====== Multiplication ====== //
 Vector Vector::operator*(float value)
 {
-	return Vector(x * value, y * value, z * value);
+	return Vector(_x * value, _y * value, _z * value);
 }
 
-Vector& Vector::operator*=(float value)
+void Vector::operator*=(float value)
 {
-	x *= value;
-	y *= value;
-	z *= value;
-	return *this;
+	_x *= value;
+	_y *= value;
+	_z *= value;
+
 }
 
 Vector Vector::operator/(float value)
 {
 	assert(value != 0);
-	return Vector(x / value, y / value, z / value);
+	return Vector(_x / value, _y / value, _z / value);
 }
 
-Vector& Vector::operator/=(float value)
+void Vector::operator/=(float value)
 {
 	assert(value != 0);
-	x /= value;
-	y /= value;
-	z /= value;
-	return *this;
+	_x /= value;
+	_y /= value;
+	_z /= value;
+	
 }
 
 //Vector& Vector::operator=(const Vector& vec)
@@ -77,23 +83,23 @@ Vector& Vector::operator/=(float value)
 
 float Vector::DotProduct(Vector& vec1, Vector& vec2)
 {
-	float result = ((vec1.x * vec2.x) + (vec1.y * vec2.y) + (vec1.z * vec2.z));
+	float result = ((vec1._x * vec2._x) + (vec1._y * vec2._y) + (vec1._z * vec2._z));
 	return result;
 }
 
 float Vector::Magnitude(Vector& vec)
 {
 
-	float result = (vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z);
+	float result = (vec._x * vec._x) + (vec._y * vec._y) + (vec._z * vec._z);
 	return sqrt(result);
 }
 
 Vector Vector::CrossProduct(Vector& vec1, Vector& vec2)
 {
 	Vector crossProduct;
-	crossProduct.x = ((vec1.y * vec2.z) - (vec1.z * vec2.y));
-	crossProduct.y = ((vec1.z * vec2.x) - (vec1.x * vec2.z));
-	crossProduct.z = ((vec1.x * vec2.y) - (vec1.y * vec2.x));
+	crossProduct._x = ((vec1._y * vec2._z) - (vec1._z * vec2._y));
+	crossProduct._y = ((vec1._z * vec2._x) - (vec1._x * vec2._z));
+	crossProduct._z = ((vec1._x * vec2._y) - (vec1._y * vec2._x));
 
 	return crossProduct;
 }

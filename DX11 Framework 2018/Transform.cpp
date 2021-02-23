@@ -26,7 +26,7 @@ void Transform::SetPosition(Vector position) {
 
 void Transform::SetPosition(float x, float y, float z)
 {
-	mPosition.x = x; mPosition.y = y; mPosition.z = z;
+	mPosition._x = x; mPosition._y = y; mPosition._z = z;
 }
 
 void Transform::SetRotation(Vector rotation)
@@ -35,11 +35,11 @@ void Transform::SetRotation(Vector rotation)
 }
 void Transform::SetRotation(float x, float y, float z) {
 
-	mRotation.x = x;
+	mRotation._x = x;
 
-	mRotation.y = y;
+	mRotation._y = y;
 
-	mRotation.z = z;
+	mRotation._z = z;
 	
 }
 
@@ -50,9 +50,9 @@ void Transform::SetScale(Vector scale)
 
 void Transform::SetScale(float x, float y, float z)
 {
-	mScale.x = x;
-	mScale.y = y;
-	mScale.z = z;
+	mScale._x = x;
+	mScale._y = y;
+	mScale._z = z;
 
 }
 
@@ -92,9 +92,9 @@ Vector* Transform::GetScale()
 XMMATRIX Transform::UpdateTransforms() {
 
 	XMMATRIX transform = XMLoadFloat4x4(&mTransform);
-	XMMATRIX scale = XMMatrixScaling(mScale.x, mScale.y, mScale.z);
-	XMMATRIX position = XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z);
-	XMMATRIX rotation = XMMatrixRotationRollPitchYaw(mRotation.x, mRotation.y, mRotation.z);
+	XMMATRIX scale = XMMatrixScaling(mScale._x, mScale._y, mScale._z);
+	XMMATRIX position = XMMatrixTranslation(mPosition._x, mPosition._y, mPosition._z);
+	XMMATRIX rotation = XMMatrixRotationRollPitchYaw(mRotation._x, mRotation._y, mRotation._z);
 	XMMATRIX finalTransform = XMMatrixMultiply(scale, position) * rotation;
 
 	XMStoreFloat4x4(&mTransform, finalTransform);

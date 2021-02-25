@@ -20,8 +20,19 @@ public:
 	void SetMass(float mass);
 	float GetMass() const { return _mass; }
 
-	float GetNetForce() const { return _netForce; }
+	Vector GetNetForce() const { return _netForce; }
 
+
+	void UpdateNetForce();
+	void UpdateAccelleration();
+
+	void AddThrust(Vector thrust);
+	void AddBReaking(Vector breaking);
+	void ApplyGravity();
+	
+
+	//Update world position and velocity from physics values
+	void Move();
 
 	void Update(float deltaTime);
 	
@@ -33,7 +44,15 @@ protected:
 	float _deltaTime;
 
 	float _mass;
-	float _netForce;
+	Vector _netForce;
+
+	Vector _thrustForce;
+	Vector _breakForce;
+	Vector _friction;
+	float _dampening;
+	float _gravity;
+
+	bool _useGravity;
 
 
 

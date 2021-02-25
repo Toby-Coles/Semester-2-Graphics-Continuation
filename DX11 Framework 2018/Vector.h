@@ -36,6 +36,8 @@ public:
 	float Distance(const Vector& vec);
 	float Magnitude(Vector& vec1);
 
+	void Invert();
+
 	//// ====== Display Methods ====== //
 	//float DisplayX();
 	//float DisplayY();

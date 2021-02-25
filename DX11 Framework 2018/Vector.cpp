@@ -94,6 +94,13 @@ float Vector::Magnitude(Vector& vec)
 	return sqrt(result);
 }
 
+void Vector::Invert()
+{
+	_x = -_x;
+	_y = -_y;
+	_z = -_z;
+}
+
 Vector Vector::CrossProduct(Vector& vec1, Vector& vec2)
 {
 	Vector crossProduct;

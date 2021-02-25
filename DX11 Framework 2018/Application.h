@@ -54,9 +54,7 @@ private:
 	//Scene Objects
 	GroundPlane* _plane;
 	SceneObject* _cube;
-	SceneObject* _earth;
-	SceneObject* _ship;
-	SceneObject* _shipPlayer;
+	SceneObject* _launchCube;
 
 	UserInterface _ui;
 

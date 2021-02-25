@@ -14,7 +14,7 @@ Application::Application()
 	appGFX = nullptr;
 	_skyMap = nullptr;
 	_cube = nullptr;
-	_earth = nullptr;
+	
 	_camera1 = nullptr;
 
 }
@@ -56,11 +56,20 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	//Create the object for the crate cube in the scene 
 	_cube = new SceneObject(appGFX);
 	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
-	_cube->_transform->SetPosition(0.3f, 0.2f, 0.1f);
+	_cube->_transform->SetPosition(0.0f, 0.0f, 5.0f);
 	_cube->_transform->SetScale(1.0f, 1.0f, 1.0f);
 	_cube->_transform->SetRotation(0.1f, 0.1f, 0.1f);
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
+	_worldSceneObjects.push_back(_cube);
+
+	_launchCube = new SceneObject(appGFX);
+	_launchCube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
+	_launchCube->_transform->SetPosition(0.0f, -10.0f, 5.0f);
+	_launchCube->_transform->SetScale(1.0f, 1.0f, 1.0f);
+	_launchCube->_transform->SetRotation(0.1f, 0.1f, 0.1f);
+	_launchCube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
+	_launchCube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_cube);
 
 	////Create the earth object in the scene
@@ -356,11 +365,12 @@ void Application::UpdateObjectControlls(float deltaTime) {
 	
 	if (GetAsyncKeyState('T')) {
 		
-		_cube->_particleModel->MoveConstVelocity(deltaTime);
+		//_cube->_particleModel->MoveConstVelocity(deltaTime);
+		_cube->_particleModel->AddThrust(Vector(1.0f, 0.0f, 0.0f));
 	}
 	if (GetAsyncKeyState('Y')) {
 		
-		_cube->_particleModel->MoveConstAccelleration(deltaTime);
+		_cube->_particleModel->AddBReaking(Vector(-1.0f, 0.0f, 0.0f));
 	}
 	
 }
@@ -505,6 +515,7 @@ void Application::ShowSceneUI()
 	ImGui::Text("F: Pitch Down");
 	ImGui::Text("F2: Wireframe");
 	ImGui::Text("Z: Flashlight (SpotLight)");
+	
 	ImGui::End();
 
 	//Sets the data that may have been altered by the UI

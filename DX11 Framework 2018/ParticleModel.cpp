@@ -2,12 +2,14 @@
 ParticleModel::ParticleModel(Transform* transform)
 {
 	_transform = transform;
-
-	_velocity._x = 0.5;	_velocity._y = 0.5;	_velocity._z = 0.5;
+	_netForce._x = 0.0f; _netForce._y = 0.0f; _netForce._z = 0.0f;
+	_mass = 2.0f;
+	_dampening = 0.2f;
+	_velocity._x = 0.0;	_velocity._y = 0.0;	_velocity._z = 0.0;
 	_accelleration._x = 0.5;  _accelleration._y = 0.5;  _accelleration._z = 0.5;
-
+	_gravity = 9.81f;
 	_vector = new Vector();
-
+	_useGravity = true;
 
 
 }
@@ -30,7 +32,8 @@ void ParticleModel::MoveConstAccelleration(float deltaTime) {
 	Vector previousVelocity = _velocity;
 
 	_transform->SetPosition(previousPosition + previousVelocity * deltaTime + _accelleration.operator*(0.5f) * deltaTime * deltaTime);
-	_velocity = previousVelocity + _accelleration.operator*(deltaTime);
+	_velocity = previousVelocity + _accelleration.
+		operator*(deltaTime);
 
 }
 
@@ -46,7 +49,68 @@ void ParticleModel::SetMass(float mass)
 	_mass = mass;
 }
 
+
+
+void ParticleModel::UpdateNetForce()
+{
+	// ======== Calculate Net Force from Forces ======== //
+	_netForce._x = _thrustForce._x + _friction._x + _breakForce._x;
+	_netForce._y = _thrustForce._y + _friction._y + _breakForce._y - _gravity;
+	_netForce._z = _thrustForce._z + _friction._z + _breakForce._z ;
+
+	
+}
+
+void ParticleModel::UpdateAccelleration()
+{
+	_accelleration._x = _netForce._x / _mass;
+	_accelleration._y = _netForce._y / _mass;
+	_accelleration._z = _netForce._z / _mass;
+}
+
+void ParticleModel::AddThrust(Vector thrust)
+{
+	_thrustForce += thrust;
+}
+
+void ParticleModel::AddBReaking(Vector breaking)
+{
+	_breakForce += breaking;
+}
+
+void ParticleModel::ApplyGravity()
+{
+	_accelleration._y += _gravity;
+}
+
+void ParticleModel::Move()
+{
+	Vector previousPosition = *_transform->GetPosition();
+	Vector newPosition;
+	Vector previousVelocity = _velocity;
+
+	//Update world position having added displacement to previous position
+	//MAKE MORE EFFICIENT
+	newPosition._x = previousPosition._x + previousVelocity._x * _deltaTime + 0.5f * _accelleration._x * _deltaTime * _deltaTime;
+	newPosition._y = previousPosition._y + previousVelocity._y * _deltaTime + 0.5f * _accelleration._y * _deltaTime * _deltaTime;
+	newPosition._z = previousPosition._z + previousVelocity._z * _deltaTime + 0.5f * _accelleration._z * _deltaTime * _deltaTime;
+	_transform->SetPosition(newPosition);
+	
+	_velocity._x = previousVelocity._x * _dampening + _accelleration._x * _deltaTime;
+	_velocity._y = previousVelocity._y * _dampening + _accelleration._y * _deltaTime;
+	_velocity._z = previousVelocity._z * _dampening + _accelleration._z * _deltaTime;
+	
+
+}
+
 void ParticleModel::Update(float deltaTime)
 {
 	_deltaTime = deltaTime;
+	UpdateNetForce();
+	UpdateAccelleration();
+	Move();
+	if (_useGravity)
+	{
+		ApplyGravity();
+	}
 }

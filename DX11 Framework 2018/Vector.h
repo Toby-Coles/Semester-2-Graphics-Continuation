@@ -36,7 +36,10 @@ public:
 	float Distance(const Vector& vec);
 	float Magnitude(Vector& vec1);
 
+	void AddScaledVector(const Vector& vector, float scale);
+
 	void Invert();
+	void Clear();
 
 	//// ====== Display Methods ====== //
 	//float DisplayX();

@@ -20,80 +20,82 @@
 
 using namespace DirectX;
 
-class Application
-{
-private:
-	
-	//Hard Coded shape values
-	ID3D11Buffer*           _pVertexBufferCube;
-	ID3D11Buffer*           _pIndexBufferCube;
-	ID3D11Buffer*			_pVertexBufferPyramid;
-	ID3D11Buffer*			_pIndexBufferPyramid;
-	
-	SimpleVertex simpleVertex;
+	class Application
+	{
+	private:
 
-	//Texturing
-	ID3D11ShaderResourceView* p_TextureRV = nullptr;
-	ID3D11ShaderResourceView* p_SpecularTexture = nullptr;
+		//Hard Coded shape values
+		ID3D11Buffer* _pVertexBufferCube;
+		ID3D11Buffer* _pIndexBufferCube;
+		ID3D11Buffer* _pVertexBufferPyramid;
+		ID3D11Buffer* _pIndexBufferPyramid;
 
-	//Update Controls
-	/*void UpdateShipControlls(float deltaTime);*/
-	void UpdateCameraControlls(float deltaTime);
-	void UpdateObjectControlls(float deltaTime);
-	
-	ApplicationGraphics* appGFX;
-	SceneObject* _skyMap;
+		SimpleVertex simpleVertex;
 
-	//Scene Objects (old, for hard coded values)
-	//std::vector<XMFLOAT4X4> sceneObjects;
+		//Texturing
+		ID3D11ShaderResourceView* p_TextureRV = nullptr;
+		ID3D11ShaderResourceView* p_SpecularTexture = nullptr;
 
-	XMFLOAT4X4 _gridPlane;
+		//Update Controls
+		/*void UpdateShipControlls(float deltaTime);*/
+		void UpdateCameraControlls(float deltaTime);
+		void UpdateObjectControlls(float deltaTime);
 
-	std::vector<SceneObject*> _worldSceneObjects;
+		ApplicationGraphics* appGFX;
+		SceneObject* _skyMap;
 
-	//Scene Objects
-	GroundPlane* _plane;
-	SceneObject* _cube;
-	SceneObject* _launchCube;
+		//Scene Objects (old, for hard coded values)
+		//std::vector<XMFLOAT4X4> sceneObjects;
 
-	UserInterface _ui;
+		XMFLOAT4X4 _gridPlane;
 
-	Camera* _camera1;
-	Camera* _camera2;
-	Camera* _camera3;
-private:
-	
-	bool _isWireFrame = false;
-	void Cleanup();
-	bool _showGridPlane;
+		std::vector<SceneObject*> _worldSceneObjects;
 
-	HRESULT InitVertexBuffer();
-	HRESULT InitIndexBuffer();
-	TimeKeep* _timer;
+		//Scene Objects
+		GroundPlane* _plane;
+		SceneObject* _cube;
+		SceneObject* _launchCube;
 
-	//Scene Objects
-	std::vector<SceneObject> _applicationObjects;
+		UserInterface _ui;
 
-	float _rotationSpeed;
-	float _earthRotationSpeed;
+		Camera* _camera1;
+		Camera* _camera2;
+		Camera* _camera3;
+	private:
 
-	float _earthRotation = 0.0f;
-	float _rotation = 0.0f;
-	XMFLOAT3 _offset = XMFLOAT3(0.0f, 3.0f, 5.0f);
+		bool _isWireFrame = false;
+		void Cleanup();
+		bool _showGridPlane;
 
-	float _moveSpeed;
+		HRESULT InitVertexBuffer();
+		HRESULT InitIndexBuffer();
+		TimeKeep* _timer;
 
-public:
-	Application();
-	~Application();
+		//Scene Objects
+		std::vector<SceneObject> _applicationObjects;
 
-	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);
+		float _rotationSpeed;
+		float _earthRotationSpeed;
 
-	void ShowSceneUI();
+		float _earthRotation = 0.0f;
+		float _rotation = 0.0f;
+		XMFLOAT3 _offset = XMFLOAT3(0.0f, 3.0f, 5.0f);
 
-	
+		float _moveSpeed;
 
-	void Update();
-	void Draw();
-};
+	public:
+		Application();
+		~Application();
+
+		HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);
+
+		void ShowSceneUI();
+
+
+
+		void Update();
+		void Draw();
+	};
+
+
 

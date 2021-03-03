@@ -94,11 +94,23 @@ float Vector::Magnitude(Vector& vec)
 	return sqrt(result);
 }
 
+void Vector::AddScaledVector(const Vector& vector, float scale)
+{
+	_x += vector._x * scale;
+	_y += vector._y * scale;
+	_z += vector._z * scale;
+}
+
 void Vector::Invert()
 {
 	_x = -_x;
 	_y = -_y;
 	_z = -_z;
+}
+
+void Vector::Clear()
+{
+	_x = _y = _z = 0;
 }
 
 Vector Vector::CrossProduct(Vector& vec1, Vector& vec2)

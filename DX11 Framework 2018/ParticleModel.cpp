@@ -2,15 +2,16 @@
 ParticleModel::ParticleModel(Transform* transform)
 {
 	_transform = transform;
+	_position = *transform->GetPosition();
 	_netForce._x = 0.0f; _netForce._y = 0.0f; _netForce._z = 0.0f;
-	_mass = 2.0f;
+	SetMass(2.0);
 	_dampening = 0.2f;
 	_velocity._x = 0.0;	_velocity._y = 0.0;	_velocity._z = 0.0;
 	_accelleration._x = 0.5;  _accelleration._y = 0.5;  _accelleration._z = 0.5;
 	_gravity = 9.81f;
 	_vector = new Vector();
 	_useGravity = true;
-
+	
 
 }
 
@@ -44,9 +45,15 @@ void ParticleModel::SetVelocity(float x, float y, float z)
 	_velocity._z = z;
 }
 
+void ParticleModel::GetVelocity(Vector* velocity)
+{
+	*velocity = ParticleModel::_velocity;
+}
+
 void ParticleModel::SetMass(float mass)
 {
-	_mass = mass;
+	assert(mass != 0);
+	ParticleModel::_inverseMass = ((float)1.0) / _mass;
 }
 
 
@@ -81,6 +88,35 @@ void ParticleModel::AddBReaking(Vector breaking)
 void ParticleModel::ApplyGravity()
 {
 	_accelleration._y += _gravity;
+}
+
+void ParticleModel::AddForce(const Vector& force)
+{
+	_forceAccumulator += force;
+}
+
+void ParticleModel::IntergrateMovement(float deltaTime)
+{
+	if (_inverseMass <= 0.0f) return;
+
+	assert(deltaTime > 0.0);
+
+	//Linear position
+	_position.AddScaledVector(_velocity, deltaTime);
+
+	//Accelleration
+	Vector resultingAccelleration = _accelleration;
+	resultingAccelleration.AddScaledVector(_forceAccumulator, _inverseMass);
+
+	//Update linear velocity from the accelleration
+	_velocity.AddScaledVector(resultingAccelleration, deltaTime);
+
+	//Impose Drag
+	_velocity *= pow(_dampening, deltaTime);
+
+	//Clear the forces so they do not effect the next intergration
+	_forceAccumulator.Clear();
+
 }
 
 void ParticleModel::Move()

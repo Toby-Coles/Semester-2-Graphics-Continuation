@@ -21,6 +21,9 @@
     <Filter Include="Object Parameters">
       <UniqueIdentifier>{391eed97-0edc-47ca-88c7-1f3ed650be04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ParticleSystem">
+      <UniqueIdentifier>{1eecc19e-23e5-4562-aa1f-1a236e435a16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imconfig.h">
@@ -82,11 +85,14 @@
     <ClInclude Include="Transform.h">
       <Filter>Object Parameters</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleModel.h">
-      <Filter>Object Parameters</Filter>
-    </ClInclude>
     <ClInclude Include="Appearance.h">
       <Filter>Object Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleModel.h">
+      <Filter>ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleForceGenerator.h">
+      <Filter>ParticleSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -143,11 +149,14 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Object Parameters</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleModel.cpp">
-      <Filter>Object Parameters</Filter>
-    </ClCompile>
     <ClCompile Include="Appearance.cpp">
       <Filter>Object Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleModel.cpp">
+      <Filter>ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleForceGenerator.cpp">
+      <Filter>ParticleSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,7 @@
 #include "GroundPlane.h"
 #include "SetUpGUI.h"
 
+#include "ParticleForceGenerator.h"
 
 using namespace DirectX;
 
@@ -62,6 +63,14 @@ using namespace DirectX;
 		Camera* _camera2;
 		Camera* _camera3;
 	private:
+		ParticleForceRegister* _forces;
+		ParticleGravity* _gravityForce;
+
+	
+		ParticleDrag* _dragForce;
+		float k1, k2;
+
+		Vector _gravity;
 
 		bool _isWireFrame = false;
 		void Cleanup();

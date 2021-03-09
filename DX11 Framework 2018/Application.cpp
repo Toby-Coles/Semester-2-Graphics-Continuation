@@ -34,25 +34,23 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	
 	//Create and set variables for the camera object and set the current active camera in the program
 	_camera1 = new Camera();
-	   
+	
+	//Set up force registry and define forces
+	_forces = new ParticleForceRegister();
+	_gravity = Vector(0.0, -9.81f, 0.0f);
+	k1 = 0.985f;
+	k2 = 0.985f;
+
+	//_gravityForce = new ParticleGravity(_gravity);
+	_dragForce = new ParticleDrag(k1, k2);
+
+	
 
 	_camera1->SetCameraPosition(XMFLOAT3(0.0f, 0.0f, 15.5f));
 	_camera1->LookAt(_camera1->GetCameraPosition(), XMFLOAT3(0.0f, 0.0f, 1.0f), _camera1->GetCameraUp());
 	_camera1->SetLens(90.0f, 1920 /1080, 0.01f, 1000.0f);
 
-	/*_camera2 = new Camera();
-	_camera2->SetCameraPosition(XMFLOAT3(0.0f, 0.0f, 15.0f));
-	_camera2->LookAt(_camera2->GetCameraPosition(), XMFLOAT3(0.0f, 0.0f, 1.0f), _camera2->GetCameraUp());
-	_camera2->SetLens(90.0f, 1920 / 1080, 0.01f, 1000.0f);
-	_camera2->UpdateViewMatrix();
-
-	_camera3 = new Camera();
-	_camera3->SetCameraPosition(XMFLOAT3(20.0f, 22.0f, 23.0f));
-	_camera3->SetLens(90.0f, 1920 / 1080, 0.01f, 1000.0f);
-	_camera3->LookAt(XMFLOAT3(20.0f, 22.0f, 23.0f), XMFLOAT3(0.0f, -0.72f, -0.51f), XMFLOAT3(0.51f, 0.68f, 0.5f));
-	_camera3->UpdateViewMatrix();*/
 	
-
 	//Create the object for the crate cube in the scene 
 	_cube = new SceneObject(appGFX);
 	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
@@ -63,6 +61,9 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_cube);
 
+	//_forces->Add(_cube->GetParticle(), _gravityForce);
+	_forces->Add(_cube->GetParticle(), _dragForce); 
+
 	_launchCube = new SceneObject(appGFX);
 	_launchCube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	_launchCube->_transform->SetPosition(0.0f, -10.0f, 5.0f);
@@ -71,33 +72,6 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_launchCube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_launchCube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_cube);
-
-	////Create the earth object in the scene
-	//_earth = new SceneObject(appGFX);
-	//_earth->_appearance->LoadModelMesh("Models/sphere2.obj", appGFX->GetDevice());
-	//_earth->_transform->SetPosition(XMFLOAT3(0.0f, 0.0f, 0.0f));
-	//_earth->_transform->SetScale(XMFLOAT3(10.0f, 10.0f, 10.0f));
-	//_earth->_appearance->GenerateTexture(L"Textures/earth_color.dds", appGFX->GetDevice());
-	//_earth->_appearance->GenerateTexture(L"Textures/earth_spec.dds", appGFX->GetDevice());
-	//_earth->_appearance->GenerateTexture(L"Textures/earth_night.dds", appGFX->GetDevice());
-	//_worldSceneObjects.push_back(_earth);
-
-	/*_ship = new SceneObject(appGFX);
-	_ship->_appearance->LoadModelMesh("Models/userModel.obj", appGFX->GetDevice());
-	_ship->_transform->SetPosition(XMFLOAT3(0.0f, 0.0f, - 25.0f));
-	_ship->_transform->SetScale(XMFLOAT3(0.3f, 0.3f, 0.3f));
-	_ship->_appearance->GenerateTexture(L"Textures/shipTex.dss", appGFX->GetDevice());
-	_worldSceneObjects.push_back(_ship);*/
-
-	/*_shipPlayer = new SceneObject(appGFX);
-	_shipPlayer->_appearance->LoadModelMesh("Models/userModelRotated.obj", appGFX->GetDevice());
-	_shipPlayer->_transform->SetPosition(XMFLOAT3(0.0f, 0.0f, 40.0f));
-	_shipPlayer->_transform->SetScale(XMFLOAT3(0.3f, 0.3f, 0.3f));
-	_shipPlayer->_appearance->GenerateTexture(L"Textures/shipTex.dss", appGFX->GetDevice());
-	_worldSceneObjects.push_back(_shipPlayer);*/
-
-	
-
 
 	//Initialise the view matrix for the camera
 	_camera1->UpdateViewMatrix();
@@ -126,7 +100,6 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	_moveSpeed = 3.0f;
 	
-
 	//Set rotation values
 	_rotation = 0.0f;
 	_rotationSpeed = 0.5f;
@@ -326,6 +299,9 @@ void Application::Update()
 	//Sets the EyePosw for rendering to that of the active camera
 	appGFX->SetEyePosW(appGFX->GetCurrentCamera()->GetCameraPosition());
 
+	//Update forces acting upon particles 
+	_forces->UpdateForces(deltaTime);
+
 
 
 	/*_earth->_transform->SetRotation (XMFLOAT3(0.0f, _earthRotation, 0.0f ));*/
@@ -334,16 +310,9 @@ void Application::Update()
 	for each (SceneObject* object in _worldSceneObjects)
 	{
 		object->Update(deltaTime);
+		//object->_particle->IntergrateMovement(deltaTime);
 	}
 
-	//Set camera 2/'s position to the ship object with a reletive offset
-	//_camera2->SetPosition(
-	//	_shipPlayer->_transform->GetPosition().x + _offset.x,
-	//	_shipPlayer->_transform->GetPosition().y + _offset.y,
-	//	_shipPlayer->_transform->GetPosition().z + _offset.z );
-
-	//Rotates the ship thats flying around earth
-	//_ship->_transform->SetRotation(XMFLOAT3(0.0f, _rotation, 0.0f));
 
 	//Constantly sets the skymaps position reletive to the active camera to give the illusion of it never moving
 	_skyMap->_transform->SetPosition(appGFX->GetCurrentCamera()->GetCameraPosition().x, appGFX->GetCurrentCamera()->GetCameraPosition().y, appGFX->GetCurrentCamera()->GetCameraPosition().z);
@@ -366,54 +335,16 @@ void Application::UpdateObjectControlls(float deltaTime) {
 	if (GetAsyncKeyState('T')) {
 		
 		//_cube->_particleModel->MoveConstVelocity(deltaTime);
-		_cube->_particleModel->AddThrust(Vector(1.0f, 0.0f, 0.0f));
+		_cube->_particle->AddForce(Vector(10.0f, 0.0f, 0.0f));
 	}
 	if (GetAsyncKeyState('Y')) {
 		
-		_cube->_particleModel->AddBReaking(Vector(-1.0f, 0.0f, 0.0f));
+		_cube->_particle->AddForce(Vector(-10.0f, 0.0f, 0.0f));
 	}
 	
 }
 
 
-
-//void Application::UpdateShipControlls(float deltaTime) {
-//	XMFLOAT3 shipPosition = _shipPlayer->_transform->GetPosition();
-//	XMFLOAT3 shipRotation = _shipPlayer->_transform->GetRotation();
-//
-//	if (GetAsyncKeyState('I'))
-//	{
-//		shipPosition.z += -_moveSpeed * deltaTime;
-//	}
-//	else if (GetAsyncKeyState('K'))
-//	{
-//		shipPosition.z += _moveSpeed * deltaTime;
-//	}
-//	if (GetAsyncKeyState('J'))
-//	{
-//		shipPosition.x += _moveSpeed * deltaTime;
-//	}
-//	else if (GetAsyncKeyState('L'))
-//	{
-//		shipPosition.x += -_moveSpeed * deltaTime;
-//	}
-//	if (GetAsyncKeyState('O'))
-//	{
-//		shipRotation.y += _moveSpeed * deltaTime;
-//	}
-//
-//	//Position update
-//	if (shipPosition.x != _shipPlayer->_transform->GetPosition().x
-//		|| shipPosition.z != _shipPlayer->_transform->GetPosition().z)
-//		_shipPlayer->_transform->SetPosition(shipPosition);
-//
-//	//Rotation Update
-//	if (shipRotation.x != _shipPlayer->_transform->GetRotation().x
-//		|| shipRotation.y != _shipPlayer->_transform->GetRotation().y ||
-//		shipRotation.z != _shipPlayer->_transform->GetRotation().z)
-//		_shipPlayer->_transform->SetRotation(shipRotation);
-//
-//}
 void Application::UpdateCameraControlls(float deltaTime)
 {
 	//Camera controlls for W, A, S and D
@@ -464,7 +395,15 @@ void Application::ShowSceneUI()
 	//XMFLOAT3 shipPosition = XMFLOAT3(_ship->_transform->GetPosition());
 
 	ImGui::Begin("Scene Object Control Panel");
-	//ImGui::Text("Earth");
+	float cubeVelocityX = _cube->_particle->GetVelocity()._x;
+	float cubeVelocityY = _cube->_particle->GetVelocity()._y;
+	float cubeVelocityZ = _cube->_particle->GetVelocity()._z;
+
+	ImGui::Text("WoodenCube");
+	ImGui::SliderFloat("Velocity", &cubeVelocityX , -100.0f, 100.0f);
+	ImGui::SliderFloat("Velocity", &cubeVelocityY, -100.0f, 100.0f);
+	ImGui::SliderFloat("Velocity", &cubeVelocityZ, -100.0f, 100.0f);
+
 	//ImGui::SliderFloat("Earth Scale X", &earthScale.x, 0.0f, 50.0f);
 	//ImGui::SliderFloat("Earth Scale Y", &earthScale.y, 0.0f, 50.0f);
 	//ImGui::SliderFloat("Earth Scale Z", &earthScale.z, 0.0f, 50.0f);

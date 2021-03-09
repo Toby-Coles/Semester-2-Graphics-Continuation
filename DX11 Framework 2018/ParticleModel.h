@@ -28,24 +28,24 @@
 
 		void AddThrust(Vector thrust);
 		void AddBReaking(Vector breaking);
-		void ApplyGravity();
+
 
 		void AddForce(const Vector& force);
 
 		void IntergrateMovement(float deltaTime);
 		//Update world position and velocity from physics values
-		void Move();
+		void Move(float deltaTime);
 
 		void Update(float deltaTime);
 
 	protected:
 		Transform* _transform;
-		Vector _position;
+		//Vector _position;
 		Vector _velocity;
 		Vector _accelleration;
 
 		Vector _forceAccumulator;
-		float _deltaTime;
+		
 
 		float _mass;
 		float _inverseMass;

@@ -65,4 +65,10 @@ void ParticleForceRegister::Clear()
 
 void ParticleForceRegister::UpdateForces(float deltaTime)
 {
+	Registry::iterator i = _registrations.begin();
+	for(; i != _registrations.end(); i++)
+	{
+		i->forceGen->UpdateForce(i->particle, deltaTime);
+
+	}
 }

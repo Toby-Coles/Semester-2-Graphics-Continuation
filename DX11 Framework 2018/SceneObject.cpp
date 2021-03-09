@@ -26,7 +26,10 @@ void SceneObject::Initialise()
 {
 	_transform = new Transform();
 	_appearance = new Appearance();
-	_particleModel = new ParticleModel(_transform);
+	_particle = new ParticleModel(_transform);
+	//_forces = new ParticleForceRegister();
+
+	//_forces->Add(_particle, _gravity);
 
 
 	//Set initial Values
@@ -71,8 +74,9 @@ void SceneObject::Draw(ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer,UIN
 
 void SceneObject::Update(float deltaTime)
 {
-	_particleModel->Update(deltaTime);
+	_particle->Update(deltaTime);
 	_transform->UpdateTransforms();
+	//_forces->UpdateForces(deltaTime);
 }
 
 

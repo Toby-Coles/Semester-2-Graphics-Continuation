@@ -11,6 +11,7 @@
 #include "Transform.h"
 #include "Appearance.h"
 #include "ParticleModel.h"
+#include "ParticleForceGenerator.h"
 
 #include <vector>
 
@@ -29,14 +30,19 @@ public:
 	void Update(float deltaTime); 
 	void Initialise();
 
+	ParticleModel* GetParticle() const { return _particle; }
+
 	ApplicationGraphics* appGFX;
 
 	Transform* _transform;
 	Appearance* _appearance;
-	ParticleModel* _particleModel;
+	ParticleModel* _particle;
 	
 private:
 	float _deltaTime;
+
+	ParticleForceRegister* _forces;
+	ParticleGravity* _gravity;
 
 protected:
 	

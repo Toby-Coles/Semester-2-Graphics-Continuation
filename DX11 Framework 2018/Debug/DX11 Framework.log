@@ -1,52 +1,5 @@
 ﻿  Application.cpp
 C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\CubeObject.h(8,34): warning C4100: 'graphics': unreferenced formal parameter
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\Application.cpp(364,47): warning C4100: 'deltaTime': unreferenced formal parameter
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\Application.cpp(507,14): warning C4129: '=': unrecognized character escape sequence
-  DX11 Framework.cpp
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\CubeObject.h(8,34): warning C4100: 'graphics': unreferenced formal parameter
-  GroundPlane.cpp
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\GroundPlane.cpp(58,27): warning C4244: '=': conversion from 'UINT' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=unsigned short
-          ]
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\GroundPlane.cpp(59,35): warning C4244: '=': conversion from 'UINT' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=unsigned short
-          ]
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\GroundPlane.cpp(60,37): warning C4244: '=': conversion from 'UINT' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=unsigned short
-          ]
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\GroundPlane.cpp(62,37): warning C4244: '=': conversion from 'UINT' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=unsigned short
-          ]
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\GroundPlane.cpp(63,35): warning C4244: '=': conversion from 'UINT' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=unsigned short
-          ]
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\GroundPlane.cpp(64,41): warning C4244: '=': conversion from 'UINT' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=unsigned short
-          ]
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\GroundPlane.cpp(15,8): warning C4189: 'du': local variable is initialized but not referenced
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\GroundPlane.cpp(16,8): warning C4189: 'dv': local variable is initialized but not referenced
-  ParticleForceGenerator.cpp
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\ParticleForceGenerator.cpp(17,66): warning C4100: 'deltaTime': unreferenced formal parameter
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\ParticleForceGenerator.cpp(31,63): warning C4100: 'deltaTime': unreferenced formal parameter
-  ParticleModel.cpp
-  SceneObject.cpp
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\SceneObject.cpp(33,43): warning C4238: nonstandard extension used: class rvalue used as lvalue
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\SceneObject.cpp(52,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\SceneObject.cpp(61,66): warning C4239: nonstandard extension used: 'argument': conversion from 'DirectX::XMFLOAT4X4' to 'DirectX::XMFLOAT4X4 &'
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\SceneObject.cpp(61,66): message : A non-const reference may only be bound to an lvalue
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\SceneObject.cpp(67,66): warning C4239: nonstandard extension used: 'argument': conversion from 'DirectX::XMFLOAT4X4' to 'DirectX::XMFLOAT4X4 &'
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\SceneObject.cpp(67,66): message : A non-const reference may only be bound to an lvalue
-  Generating Code...
+C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\Application.cpp(333,47): warning C4100: 'deltaTime': unreferenced formal parameter
+C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\Application.cpp(446,14): warning C4129: '=': unrecognized character escape sequence
   DX11 Framework.vcxproj -> C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\Debug\DX11 Framework.exe

@@ -2,12 +2,12 @@
 ParticleModel::ParticleModel(Transform* transform)
 {
 	_transform = transform;
-	_position = *transform->GetPosition();
+	//_position = *transform->GetPosition();
 	_netForce._x = 0.0f; _netForce._y = 0.0f; _netForce._z = 0.0f;
 	SetMass(2.0);
-	_dampening = 0.2f;
+	_dampening = 0.98f;
 	_velocity._x = 0.0;	_velocity._y = 0.0;	_velocity._z = 0.0;
-	_accelleration._x = 0.5;  _accelleration._y = 0.5;  _accelleration._z = 0.5;
+	_accelleration._x = 0.0;  _accelleration._y = 0.0;  _accelleration._z = 0.0;
 	_gravity = 9.81f;
 	_vector = new Vector();
 	_useGravity = true;
@@ -53,6 +53,8 @@ void ParticleModel::GetVelocity(Vector* velocity)
 void ParticleModel::SetMass(float mass)
 {
 	assert(mass != 0);
+	_mass = mass;
+
 	ParticleModel::_inverseMass = ((float)1.0) / _mass;
 }
 
@@ -68,12 +70,7 @@ void ParticleModel::UpdateNetForce()
 	
 }
 
-void ParticleModel::UpdateAccelleration()
-{
-	_accelleration._x = _netForce._x / _mass;
-	_accelleration._y = _netForce._y / _mass;
-	_accelleration._z = _netForce._z / _mass;
-}
+
 
 void ParticleModel::AddThrust(Vector thrust)
 {
@@ -85,10 +82,7 @@ void ParticleModel::AddBReaking(Vector breaking)
 	_breakForce += breaking;
 }
 
-void ParticleModel::ApplyGravity()
-{
-	_accelleration._y += _gravity;
-}
+
 
 void ParticleModel::AddForce(const Vector& force)
 {
@@ -102,7 +96,8 @@ void ParticleModel::IntergrateMovement(float deltaTime)
 	assert(deltaTime > 0.0);
 
 	//Linear position
-	_position.AddScaledVector(_velocity, deltaTime);
+	//position.AddScaledVector(_velocity, deltaTime);
+	
 
 	//Accelleration
 	Vector resultingAccelleration = _accelleration;
@@ -112,14 +107,14 @@ void ParticleModel::IntergrateMovement(float deltaTime)
 	_velocity.AddScaledVector(resultingAccelleration, deltaTime);
 
 	//Impose Drag
-	_velocity *= pow(_dampening, deltaTime);
+	//_velocity *= pow(_dampening, deltaTime);
 
 	//Clear the forces so they do not effect the next intergration
 	_forceAccumulator.Clear();
 
 }
 
-void ParticleModel::Move()
+void ParticleModel::Move(float deltaTime)
 {
 	Vector previousPosition = *_transform->GetPosition();
 	Vector newPosition;
@@ -127,26 +122,29 @@ void ParticleModel::Move()
 
 	//Update world position having added displacement to previous position
 	//MAKE MORE EFFICIENT
-	newPosition._x = previousPosition._x + previousVelocity._x * _deltaTime + 0.5f * _accelleration._x * _deltaTime * _deltaTime;
-	newPosition._y = previousPosition._y + previousVelocity._y * _deltaTime + 0.5f * _accelleration._y * _deltaTime * _deltaTime;
-	newPosition._z = previousPosition._z + previousVelocity._z * _deltaTime + 0.5f * _accelleration._z * _deltaTime * _deltaTime;
+	newPosition._x = previousPosition._x + previousVelocity._x * deltaTime + 0.5f * _accelleration._x * deltaTime * deltaTime;
+	newPosition._y = previousPosition._y + previousVelocity._y * deltaTime + 0.5f * _accelleration._y * deltaTime * deltaTime;
+	newPosition._z = previousPosition._z + previousVelocity._z * deltaTime + 0.5f * _accelleration._z * deltaTime * deltaTime;
 	_transform->SetPosition(newPosition);
 	
-	_velocity._x = previousVelocity._x * _dampening + _accelleration._x * _deltaTime;
-	_velocity._y = previousVelocity._y * _dampening + _accelleration._y * _deltaTime;
-	_velocity._z = previousVelocity._z * _dampening + _accelleration._z * _deltaTime;
+	_velocity._x = previousVelocity._x  + _accelleration._x * deltaTime;
+	_velocity._y = previousVelocity._y  + _accelleration._y * deltaTime;
+	_velocity._z = previousVelocity._z  + _accelleration._z * deltaTime;
 	
 
+}
+void ParticleModel::UpdateAccelleration()
+{
+	_accelleration._x = _forceAccumulator._x / _mass;
+	_accelleration._y = _forceAccumulator._y / _mass;
+	_accelleration._z = _forceAccumulator._z / _mass;
 }
 
 void ParticleModel::Update(float deltaTime)
 {
-	_deltaTime = deltaTime;
-	UpdateNetForce();
-	UpdateAccelleration();
-	Move();
-	if (_useGravity)
-	{
-		ApplyGravity();
-	}
+	IntergrateMovement(deltaTime);
+	//UpdateNetForce();
+	//UpdateAccelleration();
+	Move(deltaTime);
+	
 }

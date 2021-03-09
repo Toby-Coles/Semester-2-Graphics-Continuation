@@ -63,7 +63,7 @@ void Vector::operator*=(float value)
 
 Vector Vector::operator/(float value)
 {
-	assert(value != 0);
+	//assert(value != 0);
 	return Vector(_x / value, _y / value, _z / value);
 }
 

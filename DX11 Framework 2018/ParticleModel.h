@@ -9,10 +9,6 @@
 		ParticleModel(Transform* transform);
 		~ParticleModel();
 
-		void MoveConstVelocity(float deltaTime);
-
-		void MoveConstAccelleration(float deltaTime);
-
 		void SetVelocity(float x, float y, float z);
 		Vector GetVelocity() const { return _velocity; }
 		void GetVelocity(Vector* velocity);
@@ -23,12 +19,8 @@
 		Vector GetNetForce() const { return _netForce; }
 
 
-		void UpdateNetForce();
+		
 		void UpdateAccelleration();
-
-		void AddThrust(Vector thrust);
-		void AddBReaking(Vector breaking);
-
 
 		void AddForce(const Vector& force);
 

@@ -18,6 +18,7 @@ void ParticleGravity::UpdateForce(ParticleModel* particle, float deltaTime) {
 	//ensure particle does not have infinite mass
 	if (particle->GetMass() <= 0) return;
 
+	
 	particle->AddForce(_gravity * particle->GetMass());
 
 }

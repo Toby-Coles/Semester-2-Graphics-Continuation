@@ -394,6 +394,7 @@
     <ClCompile Include="Imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="Imgui\imgui_tables.cpp" />
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Maths.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="ParticleForceGenerator.cpp" />
     <ClCompile Include="ParticleModel.cpp" />
@@ -422,6 +423,7 @@
     <ClInclude Include="Imgui\imstb_textedit.h" />
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="LightStructs.h" />
+    <ClInclude Include="Maths.h" />
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="ParticleForceGenerator.h" />
     <ClInclude Include="ParticleModel.h" />

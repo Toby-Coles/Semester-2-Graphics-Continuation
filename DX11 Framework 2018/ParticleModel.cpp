@@ -19,25 +19,6 @@ ParticleModel::~ParticleModel()
 {
 }
 
-
-void ParticleModel::MoveConstVelocity( float deltaTime)
-{
-	Vector previousPosition = *_transform->GetPosition();
-
-	_transform->SetPosition( previousPosition + _velocity * deltaTime);
-
-}
-
-void ParticleModel::MoveConstAccelleration(float deltaTime) {
-	Vector previousPosition = *_transform->GetPosition();
-	Vector previousVelocity = _velocity;
-
-	_transform->SetPosition(previousPosition + previousVelocity * deltaTime + _accelleration.operator*(0.5f) * deltaTime * deltaTime);
-	_velocity = previousVelocity + _accelleration.
-		operator*(deltaTime);
-
-}
-
 void ParticleModel::SetVelocity(float x, float y, float z)
 {
 	_velocity._x = x;
@@ -59,28 +40,6 @@ void ParticleModel::SetMass(float mass)
 }
 
 
-
-void ParticleModel::UpdateNetForce()
-{
-	// ======== Calculate Net Force from Forces ======== //
-	_netForce._x = _thrustForce._x + _friction._x + _breakForce._x;
-	_netForce._y = _thrustForce._y + _friction._y + _breakForce._y - _gravity;
-	_netForce._z = _thrustForce._z + _friction._z + _breakForce._z ;
-
-	
-}
-
-
-
-void ParticleModel::AddThrust(Vector thrust)
-{
-	_thrustForce += thrust;
-}
-
-void ParticleModel::AddBReaking(Vector breaking)
-{
-	_breakForce += breaking;
-}
 
 
 
@@ -106,9 +65,6 @@ void ParticleModel::IntergrateMovement(float deltaTime)
 	//Update linear velocity from the accelleration
 	_velocity.AddScaledVector(resultingAccelleration, deltaTime);
 
-	//Impose Drag
-	//_velocity *= pow(_dampening, deltaTime);
-
 	//Clear the forces so they do not effect the next intergration
 	_forceAccumulator.Clear();
 
@@ -133,6 +89,7 @@ void ParticleModel::Move(float deltaTime)
 	
 
 }
+
 void ParticleModel::UpdateAccelleration()
 {
 	_accelleration._x = _forceAccumulator._x / _mass;

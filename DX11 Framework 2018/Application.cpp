@@ -38,12 +38,12 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	//Set up force registry and define forces
 	_forces = new ParticleForceRegister();
 	_gravity = Vector(0.0, -9.81f, 0.0f);
-	k1 = 0.985f;
-	k2 = 0.985f;
+	k1 = 0.487f;
+	k2 = 0.8f;
 
-	//_gravityForce = new ParticleGravity(_gravity);
+	_gravityForce = new ParticleGravity(_gravity);
 	_dragForce = new ParticleDrag(k1, k2);
-
+	//_gravityForce = new ParticleGravity(_gravity);
 	
 
 	_camera1->SetCameraPosition(XMFLOAT3(0.0f, 0.0f, 15.5f));
@@ -61,7 +61,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_cube);
 
-	//_forces->Add(_cube->GetParticle(), _gravityForce);
+	_forces->Add(_cube->GetParticle(), _gravityForce);
 	_forces->Add(_cube->GetParticle(), _dragForce); 
 
 	_launchCube = new SceneObject(appGFX);
@@ -91,7 +91,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_plane->GeneratePlane(30.0f, 30.0f, 8, 8);
 	_plane->_transform->SetPosition (0.0f, -10.0f, 0.0f);
 	_plane->_appearance->GenerateTexture(L"Textures/planeSurface.dds", appGFX->GetDevice());
-	_showGridPlane = true;
+	_showGridPlane = false;
 	
 	//Initialise the timer in the program
 	_timer = new TimeKeep();
@@ -314,6 +314,10 @@ void Application::Update()
 	}
 
 
+	if (_cube->_transform->GetPosition()->_y <= -10.0f)
+	{
+		_cube->_particle->AddForce(Vector(0.0f, 25.81f, 0.0f));
+	}
 	//Constantly sets the skymaps position reletive to the active camera to give the illusion of it never moving
 	_skyMap->_transform->SetPosition(appGFX->GetCurrentCamera()->GetCameraPosition().x, appGFX->GetCurrentCamera()->GetCameraPosition().y, appGFX->GetCurrentCamera()->GetCameraPosition().z);
 	_skyMap->Update(deltaTime);

@@ -42,6 +42,7 @@ public:
 	* The default constructor creates a quaternion representing
 	* a zero rotation.
 	*/
+	float data[4];
 	Quaternion() : r(1), i(0), j(0), k(0) {}
 
 	/**
@@ -126,9 +127,9 @@ public:
 	void addScaledVector(const Vector& vector, float scale)
 	{
 		Quaternion q(0,
-			vector.x * scale,
-			vector.y * scale,
-			vector.z * scale);
+			vector._x * scale,
+			vector._y * scale,
+			vector._z * scale);
 		q *= *this;
 		r += q.r * 0.5f;
 		i += q.i * 0.5f;
@@ -138,7 +139,7 @@ public:
 
 	void rotateByVector(const Vector& vector)
 	{
-		Quaternion q(0, vector.x, vector.y, vector.z);
+		Quaternion q(0, vector._x, vector._y, vector._z);
 		(*this) *= q;
 	}
 };
@@ -174,9 +175,9 @@ static inline void CalculateTransformMatrixColumnMajor(XMMATRIX& transformMatrix
 		2 * orientation.j * orientation.j);
 	transformMatrix.r[2] = XMVectorSetW(transformMatrix.r[2], 0.0f);
 
-	transformMatrix.r[3] = XMVectorSetX(transformMatrix.r[3], position.x);
-	transformMatrix.r[3] = XMVectorSetY(transformMatrix.r[3], position.y);
-	transformMatrix.r[3] = XMVectorSetZ(transformMatrix.r[3], position.z);
+	transformMatrix.r[3] = XMVectorSetX(transformMatrix.r[3], position._x);
+	transformMatrix.r[3] = XMVectorSetY(transformMatrix.r[3], position._y);
+	transformMatrix.r[3] = XMVectorSetZ(transformMatrix.r[3], position._z);
 	transformMatrix.r[3] = XMVectorSetW(transformMatrix.r[3], 1.0f);
 }
 
@@ -187,17 +188,17 @@ static inline void CalculateTransformMatrixRowMajor(XMMATRIX& transformMatrix,
 	transformMatrix.r[0] = XMVectorSetX(transformMatrix.r[0], 1 - 2 * orientation.j * orientation.j - 2 * orientation.k * orientation.k);
 	transformMatrix.r[0] = XMVectorSetY(transformMatrix.r[0], 2 * orientation.i * orientation.j - 2 * orientation.r * orientation.k);
 	transformMatrix.r[0] = XMVectorSetZ(transformMatrix.r[0], 2 * orientation.i * orientation.k + 2 * orientation.r * orientation.j);
-	transformMatrix.r[0] = XMVectorSetW(transformMatrix.r[0], position.x);
+	transformMatrix.r[0] = XMVectorSetW(transformMatrix.r[0], position._x);
 
 	transformMatrix.r[1] = XMVectorSetX(transformMatrix.r[1], 2 * orientation.i * orientation.j + 2 * orientation.r * orientation.k);
 	transformMatrix.r[1] = XMVectorSetY(transformMatrix.r[1], 1 - 2 * orientation.i * orientation.i - 2 * orientation.k * orientation.k);
 	transformMatrix.r[1] = XMVectorSetZ(transformMatrix.r[1], 2 * orientation.j * orientation.k - 2 * orientation.r * orientation.i);
-	transformMatrix.r[1] = XMVectorSetW(transformMatrix.r[1], position.y);
+	transformMatrix.r[1] = XMVectorSetW(transformMatrix.r[1], position._y);
 
 	transformMatrix.r[2] = XMVectorSetX(transformMatrix.r[2], 2 * orientation.i * orientation.k - 2 * orientation.r * orientation.j);
 	transformMatrix.r[2] = XMVectorSetY(transformMatrix.r[2], 2 * orientation.j * orientation.k + 2 * orientation.r * orientation.i);
 	transformMatrix.r[2] = XMVectorSetZ(transformMatrix.r[2], 1 - 2 * orientation.i * orientation.i - 2 * orientation.j * orientation.j);
-	transformMatrix.r[2] = XMVectorSetW(transformMatrix.r[2], position.z);
+	transformMatrix.r[2] = XMVectorSetW(transformMatrix.r[2], position._z);
 
 	/*
 	transformMatrix.r[3] = XMVectorSetX(transformMatrix.r[3], position.x);

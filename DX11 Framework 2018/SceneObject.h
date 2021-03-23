@@ -12,6 +12,8 @@
 #include "Appearance.h"
 #include "ParticleModel.h"
 #include "ParticleForceGenerator.h"
+#include "RigidBody.h"
+#include "RigidBodyForceGenerator.h"
 
 #include <vector>
 
@@ -34,12 +36,15 @@ public:
 
 	ApplicationGraphics* appGFX;
 
+	RigidBody* _body;
 	Transform* _transform;
 	Appearance* _appearance;
 	ParticleModel* _particle;
 	
 private:
 	float _deltaTime;
+	bool isRigidBody;
+
 
 	ParticleForceRegister* _forces;
 	ParticleGravity* _gravity;

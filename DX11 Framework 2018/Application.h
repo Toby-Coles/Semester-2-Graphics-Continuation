@@ -63,10 +63,11 @@ using namespace DirectX;
 		Camera* _camera2;
 		Camera* _camera3;
 	private:
-		ParticleForceRegister* _forces;
-		ParticleGravity* _gravityForce;
 
-	
+
+		ParticleForceRegister* _particleForces;
+		ParticleGravity* _particleGravityForce;
+
 		ParticleDrag* _dragForce;
 		float k1, k2;
 
@@ -99,6 +100,10 @@ using namespace DirectX;
 		HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);
 
 		void ShowSceneUI();
+
+		//Rigid Body Methods
+		void RigidFirstFrame();
+		void UpdatePhysics();
 
 
 

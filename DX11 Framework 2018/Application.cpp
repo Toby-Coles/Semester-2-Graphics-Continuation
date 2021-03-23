@@ -36,12 +36,12 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_camera1 = new Camera();
 	
 	//Set up force registry and define forces
-	_forces = new ParticleForceRegister();
+	_particleForces = new ParticleForceRegister();
 	_gravity = Vector(0.0, -9.81f, 0.0f);
 	k1 = 0.487f;
 	k2 = 0.8f;
 
-	_gravityForce = new ParticleGravity(_gravity);
+	_particleGravityForce = new ParticleGravity(_gravity);
 	_dragForce = new ParticleDrag(k1, k2);
 	//_gravityForce = new ParticleGravity(_gravity);
 	
@@ -61,17 +61,17 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_cube);
 
-	_forces->Add(_cube->GetParticle(), _gravityForce);
-	_forces->Add(_cube->GetParticle(), _dragForce); 
+	_particleForces->Add(_cube->GetParticle(), _particleGravityForce);
+	_particleForces->Add(_cube->GetParticle(), _dragForce);
 
-	_launchCube = new SceneObject(appGFX);
+	/*_launchCube = new SceneObject(appGFX);
 	_launchCube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	_launchCube->_transform->SetPosition(0.0f, -10.0f, 5.0f);
 	_launchCube->_transform->SetScale(1.0f, 1.0f, 1.0f);
 	_launchCube->_transform->SetRotation(0.1f, 0.1f, 0.1f);
 	_launchCube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_launchCube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
-	_worldSceneObjects.push_back(_cube);
+	_worldSceneObjects.push_back(_cube);*/
 
 	//Initialise the view matrix for the camera
 	_camera1->UpdateViewMatrix();
@@ -300,7 +300,7 @@ void Application::Update()
 	appGFX->SetEyePosW(appGFX->GetCurrentCamera()->GetCameraPosition());
 
 	//Update forces acting upon particles 
-	_forces->UpdateForces(deltaTime);
+	_particleForces->UpdateForces(deltaTime);
 
 
 
@@ -347,6 +347,9 @@ void Application::UpdateObjectControlls(float deltaTime) {
 	}
 	
 }
+
+
+
 
 
 void Application::UpdateCameraControlls(float deltaTime)
@@ -467,6 +470,8 @@ void Application::ShowSceneUI()
 	_ship->_transform->SetScale(shipOrbiterScale);
 	_ship->_transform->SetPosition(shipPosition);*/
 }
+
+
 
 void Application::Draw()
 {

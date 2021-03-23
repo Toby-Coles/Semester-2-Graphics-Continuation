@@ -4,7 +4,7 @@ SceneObject::SceneObject (ApplicationGraphics* graphics) {
 
 	
 	this->appGFX = graphics;
-
+	isRigidBody = true;
 
 
 	Initialise();
@@ -26,7 +26,15 @@ void SceneObject::Initialise()
 {
 	_transform = new Transform();
 	_appearance = new Appearance();
-	_particle = new ParticleModel(_transform);
+	if (isRigidBody)
+	{
+		_body = new RigidBody();
+
+	}
+	else
+	{
+		_particle = new ParticleModel(_transform);
+	}
 	//_forces = new ParticleForceRegister();
 
 	//_forces->Add(_particle, _gravity);
@@ -74,7 +82,16 @@ void SceneObject::Draw(ID3D11Buffer* vertexBuffer, ID3D11Buffer* indexBuffer,UIN
 
 void SceneObject::Update(float deltaTime)
 {
-	_particle->Update(deltaTime);
+	if (isRigidBody)
+	{
+		_body->Update(deltaTime);
+	}
+	else
+	{
+		_particle->Update(deltaTime);
+
+	}
+
 	_transform->UpdateTransforms();
 	//_forces->UpdateForces(deltaTime);
 }

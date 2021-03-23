@@ -398,6 +398,9 @@
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="ParticleForceGenerator.cpp" />
     <ClCompile Include="ParticleModel.cpp" />
+    <ClCompile Include="PhysicsHandler.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="RigidBodyForceGenerator.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="SetUpGUI.cpp" />
     <ClCompile Include="Time.cpp" />
@@ -427,7 +430,10 @@
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="ParticleForceGenerator.h" />
     <ClInclude Include="ParticleModel.h" />
+    <ClInclude Include="PhysicsHandler.h" />
     <CLInclude Include="resource.h" />
+    <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="RigidBodyForceGenerator.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="SetUpGUI.h" />
     <ClInclude Include="Structures.h" />

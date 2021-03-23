@@ -24,6 +24,9 @@
     <Filter Include="ParticleSystem">
       <UniqueIdentifier>{1eecc19e-23e5-4562-aa1f-1a236e435a16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RigidBody">
+      <UniqueIdentifier>{35012739-31e4-49f5-858d-2935b635d4d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imconfig.h">
@@ -97,6 +100,15 @@
     <ClInclude Include="Maths.h">
       <Filter>Framework Core</Filter>
     </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBodyForceGenerator.h">
+      <Filter>RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsHandler.h">
+      <Filter>Framework Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -162,6 +174,15 @@
       <Filter>ParticleSystem</Filter>
     </ClCompile>
     <ClCompile Include="Maths.cpp">
+      <Filter>Framework Core</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBodyForceGenerator.cpp">
+      <Filter>RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsHandler.cpp">
       <Filter>Framework Core</Filter>
     </ClCompile>
   </ItemGroup>

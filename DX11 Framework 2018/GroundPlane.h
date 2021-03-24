@@ -4,7 +4,7 @@
 class GroundPlane : public SceneObject
 {
 public:
-	GroundPlane(ApplicationGraphics* appGFX) : SceneObject(appGFX) {};
+	GroundPlane(ApplicationGraphics* appGFX) : SceneObject(appGFX,false) {};
 	~GroundPlane();
 
 	void GeneratePlane(float width, float depth, UINT m, UINT n);

@@ -3,7 +3,7 @@ ParticleModel::ParticleModel(Transform* transform)
 {
 	_transform = transform;
 	//_position = *transform->GetPosition();
-	_netForce._x = 0.0f; _netForce._y = 0.0f; _netForce._z = 0.0f;
+	//_netForce._x = 0.0f; _netForce._y = 0.0f; _netForce._z = 0.0f;
 	SetMass(2.0);
 	_dampening = 0.98f;
 	_velocity._x = 0.0;	_velocity._y = 0.0;	_velocity._z = 0.0;

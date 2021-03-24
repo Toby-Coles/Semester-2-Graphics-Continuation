@@ -2,15 +2,18 @@
 #include "Vector.h"
 #include "Maths.h"
 
+
 class RigidBody
 {
 public:
-	RigidBody();
-	~RigidBody();
+	
 
-	void SetMass(const float mass);
-	float GetMass()const { return _inverseMass; }
+	void CalculateDerivedData();
+	void CalculateTransformMatrix(Matrix3x4& transform, const Vector& position, const Quaternion& orientation);
 
+	void ClearAccums();
+	void Intergrate(float deltaTime);
+	
 	void AddForce(const Vector& forceToAdd);
 
 	//Adds a given force to a point on the rigid body, both in world space.
@@ -19,27 +22,50 @@ public:
 	//Adds a force to a given point, directino given in world coords, application in body space. 
 	void AddForceToBodyPoint(const Vector& force, const Vector& point);
 
-	void SetInertiaTensor(const Matrix3x3& inertiaTensor);
-
+	
 	Vector GetWordSpacePoint(const Vector& point);
 	void Update(float deltaTime);
 
-	void StartFrame();
+	
+	void SetMass(const float mass);
+	void TransformInertiaTensor(Matrix3x3& invInertiaWorld, const Quaternion& q, const Matrix3x3 invertiBody, const Matrix3x4& rotMatrix);
+	float GetMass()const { return _inverseMass; }
 
+	float GetInverseMass() const;
+
+	void SetInertiaTensor(const Matrix3x3& inertiaTensor);
+	Matrix3x3 GetInertiaTensor() const { return _inverseInertiaTensor; }
+
+
+	void SetPosition(Vector& position);
+	Vector GetPosition() const { return _position; }
+
+	void SetRotation(Vector& rotation);
+	Vector GetRotation() const { return _rotation; }
+
+	void SetAcceleration(const Vector accelleration);
+	void SetAcceleration(const float x, float y, float z);
+	void GetAcceleration(Vector* accelleration);
+
+
+	Quaternion GetOrientation() const { return _orientation; }
+	void SetOrientation(Quaternion orientation);
+
+	void SetVelocity(const Vector& velocity);
+	void SetVelocity(const float x, const float y, const float z);
+	Vector GetVelocity()const { return _velocity; }
+
+
+	void SetLinearDamping(const float damping);
+
+	
+	
 
 protected:
 
-	void CalculateDerivedData();
-	void CalculateTransformMatrix(Matrix3x4& transform, const Vector& position, const Quaternion& orientation);
-
-	
+	//Transform* _transform;
 
 
-	void ClearAccums();
-	void Intergrate(float deltaTime);
-
-	
-	
 	Vector _forceAccum;
 	Vector _torqueAccum; 
 

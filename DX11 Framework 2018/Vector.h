@@ -24,10 +24,14 @@ public:
 	Vector operator/(float value); //Vector division
 	void operator/=(float value); //Assign result from division
 
+	Vector operator%(const Vector& vector);
+	void operator %=(const Vector& vector);
+
 	//Vector& operator=(const Vector& vec);
 
 	// ====== Vector Methods ====== //
 	float DotProduct(Vector& vec1, Vector& vec2);
+	Vector VectorProduct(const Vector& vector);
 
 	Vector CrossProduct(Vector& vec1, Vector& vec2);
 	Vector Normalize(Vector& vec);

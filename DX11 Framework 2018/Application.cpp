@@ -52,17 +52,25 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	
 	//Create the object for the crate cube in the scene 
-	_cube = new SceneObject(appGFX);
+	/*_cube = new SceneObject(appGFX, true);
 	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	_cube->_transform->SetPosition(0.0f, 0.0f, 5.0f);
 	_cube->_transform->SetScale(1.0f, 1.0f, 1.0f);
 	_cube->_transform->SetRotation(0.1f, 0.1f, 0.1f);
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
+	_worldSceneObjects.push_back(_cube);*/
+
+	//RIGID TEST//
+	_cube = new SceneObject(appGFX, true);
+	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
+	_cube->_body->SetPosition(Vector(0.0f, 0.0f, 0.0f));
+	_cube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
+	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_cube);
 
-	_particleForces->Add(_cube->GetParticle(), _particleGravityForce);
-	_particleForces->Add(_cube->GetParticle(), _dragForce);
+	/*_particleForces->Add(_cube->GetParticle(), _particleGravityForce);
+	_particleForces->Add(_cube->GetParticle(), _dragForce);*/
 
 	/*_launchCube = new SceneObject(appGFX);
 	_launchCube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
@@ -79,7 +87,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	
 	//Create the object and initialise the variables for the skybox(skysphere)
-	_skyMap = new SceneObject(appGFX);
+	_skyMap = new SceneObject(appGFX, false);
 	_skyMap->_appearance->LoadModelMesh("Models/sphere2.obj", appGFX->GetDevice());
 	_skyMap->_transform->SetPosition(0.0f, 0.0f, 5.5f);
 	_skyMap->_transform->SetScale(100.0f, 100.0f, 100.0f);
@@ -314,10 +322,10 @@ void Application::Update()
 	}
 
 
-	if (_cube->_transform->GetPosition()->_y <= -10.0f)
+	/*if (_cube->_transform->GetPosition()->_y <= -10.0f)
 	{
 		_cube->_particle->AddForce(Vector(0.0f, 25.81f, 0.0f));
-	}
+	}*/
 	//Constantly sets the skymaps position reletive to the active camera to give the illusion of it never moving
 	_skyMap->_transform->SetPosition(appGFX->GetCurrentCamera()->GetCameraPosition().x, appGFX->GetCurrentCamera()->GetCameraPosition().y, appGFX->GetCurrentCamera()->GetCameraPosition().z);
 	_skyMap->Update(deltaTime);
@@ -339,11 +347,11 @@ void Application::UpdateObjectControlls(float deltaTime) {
 	if (GetAsyncKeyState('T')) {
 		
 		//_cube->_particleModel->MoveConstVelocity(deltaTime);
-		_cube->_particle->AddForce(Vector(10.0f, 0.0f, 0.0f));
+		_cube->_body->AddForce(Vector(10.0f, 0.0f, 0.0f));
 	}
 	if (GetAsyncKeyState('Y')) {
 		
-		_cube->_particle->AddForce(Vector(-10.0f, 0.0f, 0.0f));
+		_cube->_body->AddForce(Vector(-10.0f, 0.0f, 0.0f));
 	}
 	
 }
@@ -402,14 +410,14 @@ void Application::ShowSceneUI()
 	//XMFLOAT3 shipPosition = XMFLOAT3(_ship->_transform->GetPosition());
 
 	ImGui::Begin("Scene Object Control Panel");
-	float cubeVelocityX = _cube->_particle->GetVelocity()._x;
+	/*float cubeVelocityX = _cube->_particle->GetVelocity()._x;
 	float cubeVelocityY = _cube->_particle->GetVelocity()._y;
 	float cubeVelocityZ = _cube->_particle->GetVelocity()._z;
 
 	ImGui::Text("WoodenCube");
 	ImGui::SliderFloat("Velocity", &cubeVelocityX , -100.0f, 100.0f);
 	ImGui::SliderFloat("Velocity", &cubeVelocityY, -100.0f, 100.0f);
-	ImGui::SliderFloat("Velocity", &cubeVelocityZ, -100.0f, 100.0f);
+	ImGui::SliderFloat("Velocity", &cubeVelocityZ, -100.0f, 100.0f);*/
 
 	//ImGui::SliderFloat("Earth Scale X", &earthScale.x, 0.0f, 50.0f);
 	//ImGui::SliderFloat("Earth Scale Y", &earthScale.y, 0.0f, 50.0f);

@@ -18,6 +18,7 @@
 #include "SetUpGUI.h"
 
 #include "ParticleForceGenerator.h"
+#include "RigidBodyForceGenerator.h"
 
 using namespace DirectX;
 
@@ -64,9 +65,13 @@ using namespace DirectX;
 		Camera* _camera3;
 	private:
 
-
+		// ======== Particle Forces ======== //
 		ParticleForceRegister* _particleForces;
 		ParticleGravity* _particleGravityForce;
+
+		// ======== RigidBody forces ======== //
+		RigidForceRegister* _rigedForces;
+
 
 		ParticleDrag* _dragForce;
 		float k1, k2;
@@ -102,8 +107,7 @@ using namespace DirectX;
 		void ShowSceneUI();
 
 		//Rigid Body Methods
-		void RigidFirstFrame();
-		void UpdatePhysics();
+		
 
 
 

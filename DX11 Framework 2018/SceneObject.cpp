@@ -1,10 +1,10 @@
 #include "SceneObject.h"
 
-SceneObject::SceneObject (ApplicationGraphics* graphics) {
+SceneObject::SceneObject (ApplicationGraphics* graphics, bool isRigid) {
 
 	
 	this->appGFX = graphics;
-	isRigidBody = true;
+	isRigidBody = isRigid;
 
 
 	Initialise();

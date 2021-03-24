@@ -31,13 +31,14 @@ void RigidBody::Intergrate(float deltaTime)
 
 	ClearAccums();
 }
+
 void RigidBody::CalculateDerivedData()
 {
 	_orientation.normalise();
 	CalculateTransformMatrix(_transformMatrix, _position, _orientation);
 
 	//Calculate inertia tensor to world space
-	_transformInertiaTensor(_inverseInertiaTensorWorld, _orientation, _inverseInertiaTensor, _transformMatrix);
+	TransformInertiaTensor(_inverseInertiaTensorWorld, _orientation, _inverseInertiaTensor, _transformMatrix);
 
 }
 
@@ -67,9 +68,60 @@ void RigidBody::CalculateTransformMatrix(Matrix3x4& transform, const Vector& pos
 	_transformMatrix.data[11] = position._z;
 }
 
+float RigidBody::GetInverseMass() const
+{
+	return _inverseMass;
+}
+
 void RigidBody::SetInertiaTensor(const Matrix3x3& inertiaTensor)
 {
 	_inverseInertiaTensor.SetInverse(inertiaTensor);
+}
+
+void RigidBody::SetPosition(Vector& position)
+{
+	_position = position;
+}
+
+void RigidBody::SetRotation(Vector& rotation)
+{
+	_rotation = rotation;
+}
+
+void RigidBody::SetAcceleration(Vector accelleration)
+{
+	_accelleration = accelleration; 
+}
+
+void RigidBody::SetAcceleration(const float x, float y, float z)
+{
+	_accelleration._x = x; _accelleration._y = y; _accelleration._z = z;
+}
+
+void RigidBody::GetAcceleration(Vector* accelleration)
+{
+	*accelleration = RigidBody::_accelleration;
+}
+
+void RigidBody::SetLinearDamping(const float damping)
+{
+}
+
+
+
+void RigidBody::SetOrientation(Quaternion orientation)
+{
+	_orientation = orientation;
+}
+
+void RigidBody::SetVelocity(const Vector& velocity)
+{
+	RigidBody::_velocity = velocity;
+}
+
+void RigidBody::SetVelocity(const float x, const float y, const float z)
+{
+	_velocity._x = x; _velocity._y = y; _velocity._z = z;
 }
 
 void RigidBody::AddForceToPoint(const Vector& force, const Vector& point)
@@ -119,7 +171,7 @@ void RigidBody::SetMass(const float mass)
 	RigidBody::_inverseMass = ((float)1.0) / mass;
 }
 
-static inline void _transformInertiaTensor(Matrix3x3& invInertiaWorld, const Quaternion& q, const Matrix3x3 invertiBody, const Matrix3x4 &rotMatrix) {
+ void RigidBody::TransformInertiaTensor(Matrix3x3& invInertiaWorld, const Quaternion& q, const Matrix3x3 invertiBody, const Matrix3x4 &rotMatrix) {
 	
 	float t4 = rotMatrix.data[0] * invertiBody.data[0] +
 		rotMatrix.data[1] * invertiBody.data[3] +

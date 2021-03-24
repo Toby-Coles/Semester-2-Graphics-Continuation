@@ -11,12 +11,12 @@
 
 
 // **============ Gravity ============** // 
-Gravity::Gravity(const Vector& gravity) : _gravity(gravity)
+RigidGravity::RigidGravity(const Vector& gravity) : _gravity(gravity)
 {
 
 }
 
-void Gravity::UpdateForce(RigidBody* body, float deltaTime) {
+void RigidGravity::UpdateForce(RigidBody* body, float deltaTime) {
 
 	if (body->GetMass() <= 0) return;
 
@@ -24,15 +24,24 @@ void Gravity::UpdateForce(RigidBody* body, float deltaTime) {
 
 }
 
-void ForceRegistry::Add(RigidBody* body, RigidForceGen* fg)
+void RigidForceRegister::Add(RigidBody* body, RigidForceGen* fg)
 {
-	ForceRegistry::ForceRegistration registration;
+	RigidForceRegister::ForceRegistration registration;
 	registration.body = body;
 	registration.fg = fg;
 	registrations.push_back(registration);
 }
 
-void ForceRegistry::UpdateForces(float deltaTime)
+void RigidForceRegister::Remove(RigidBody* body, RigidForceGen* fg)
+{
+}
+
+void RigidForceRegister::Clear()
+{
+	registrations.clear();
+}
+
+void RigidForceRegister::UpdateForces(float deltaTime)
 {
 	Registry::iterator i = registrations.begin();
 	for (; i != registrations.end(); i++)
@@ -40,3 +49,5 @@ void ForceRegistry::UpdateForces(float deltaTime)
 		i->fg->UpdateForce(i->body, deltaTime);
 	}
 }
+
+

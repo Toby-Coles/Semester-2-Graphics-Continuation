@@ -12,28 +12,28 @@ public:
 	/*RigidForceGen();
 	~RigidForceGen();*/
 
-	virtual void UpdateForce(RigidBody* body, float deltaTime);
+	virtual void UpdateForce(RigidBody* body, float deltaTime) = 0;
 
 
 private:
 
 };
 
-class Gravity : public RigidForceGen {
+class RigidGravity : public RigidForceGen {
 
 	Vector _gravity;
 
 public:
 	
 	//Create Generator
-	Gravity(const Vector &gravity);
+	RigidGravity(const Vector &gravity);
 
 	//Apply gravitational force
 	virtual void UpdateForce(RigidBody *body, float deltaTime);
 
 };
 
-class ForceRegistry
+class RigidForceRegister
 {
 
 	struct ForceRegistration {
@@ -60,10 +60,4 @@ private:
 
 };
 
-ForceRegistry::ForceRegistry()
-{
-}
 
-ForceRegistry::~ForceRegistry()
-{
-}

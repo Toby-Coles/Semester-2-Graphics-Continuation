@@ -22,7 +22,7 @@ using namespace DirectX;
 class SceneObject
 {
 public:
-	SceneObject(ApplicationGraphics* graphics);
+	SceneObject(ApplicationGraphics* graphics, bool isRigid);
 	SceneObject();
 	~SceneObject();
 

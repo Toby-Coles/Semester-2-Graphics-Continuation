@@ -76,6 +76,18 @@ void Vector::operator/=(float value)
 	
 }
 
+Vector Vector::operator%(const Vector& vector)
+{
+	return Vector(_y * vector._z - _z * vector._y,
+		_z * vector._x - _x * vector._z,
+		_x * vector._y - _y * vector._x);
+}
+
+void Vector::operator%=(const Vector& vector)
+{
+	*this = VectorProduct(vector);
+}
+
 //Vector& Vector::operator=(const Vector& vec)
 //{
 //	// TODO: insert return statement here
@@ -85,6 +97,13 @@ float Vector::DotProduct(Vector& vec1, Vector& vec2)
 {
 	float result = ((vec1._x * vec2._x) + (vec1._y * vec2._y) + (vec1._z * vec2._z));
 	return result;
+}
+
+Vector Vector::VectorProduct(const Vector& vector)
+{
+	return Vector(_y * vector._z - _z * vector._y,
+		_z * vector._x - _x * vector._z,
+		_x * vector._y - _y * vector._x);
 }
 
 float Vector::Magnitude(Vector& vec)

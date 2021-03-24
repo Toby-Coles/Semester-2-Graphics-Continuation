@@ -220,8 +220,21 @@ static inline void CalculateTransformMatrixRowMajor(XMMATRIX& transformMatrix,
 class Matrix3x3
 {
 public:
-	Matrix3x3();
-	~Matrix3x3();
+	Matrix3x3() {
+	
+		data[0] = data[1] = data[2] = data[3] = data[4] = data[5] =
+			data[6] = data[7] = data[8] = 0;
+	};
+
+	
+
+	Matrix3x3(float c0, float c1, float c2, float c3, float c4, float c5, float c6, float c7, float c8) {
+		data[0] = c0; data[1] = c1; data[2] = c2;
+		data[3] = c3; data[4] = c4; data[5] = c5;
+		data[6] = c6; data[7] = c7; data[8] = c8;
+	}
+
+	
 
 	//Sets the matrix to invert based off the given matrix
 	void SetInverse(const Matrix3x3& m) {
@@ -290,7 +303,8 @@ public:
 		);
 	}
 
-	Matrix3x3 operator*(const Matrix3x3& o)const {
+	Matrix3x3 operator*(const Matrix3x3 &o)const 
+	{
 		return Matrix3x3(
 			data[0] * o.data[0] + data[1] * o.data[3] + data[2] * o.data[6],
 			data[0] * o.data[1] + data[1] * o.data[4] + data[2] * o.data[7],
@@ -370,8 +384,14 @@ private:
 class Matrix3x4
 {
 public:
-	Matrix3x4();
-	~Matrix3x4();
+	Matrix3x4()
+	{
+		data[1] = data[2] = data[3] = data[4] = data[6] =
+			data[7] = data[8] = data[9] = data[11] = 0;
+		data[0] = data[5] = data[10] = 1;
+	}
+
+	
 
 	//Return determinant
 	float GetDeterminant() const;
@@ -424,7 +444,7 @@ public:
 			temp._z * data[9],
 			temp._x * data[2] +
 			temp._y * data[6] +
-			temp._z * data[10]
+			temp._z * data[10]);
 	}
 
 	Vector ConvWorldToLocal(const Vector& world, const Matrix3x4 transform) {
@@ -466,7 +486,7 @@ public:
 	Vector ConvertLocalToWorldDirection(const Vector& local, const Matrix3x4& transform) {
 		return transform.TransformDirection(local);
 	}
-	Vector ConvertLocalToWorldDirection(const Vector& world, const Matrix3x4& transform) {
+	Vector ConvertWorldToLocalDirection(const Vector& world, const Matrix3x4& transform) {
 		return transform.TransformInverseDirection(world);
 	}
 

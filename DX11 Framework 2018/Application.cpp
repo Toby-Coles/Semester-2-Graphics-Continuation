@@ -65,6 +65,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_cube = new SceneObject(appGFX, true);
 	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	_cube->_body->SetPosition(Vector(0.0f, 0.0f, 0.0f));
+	_cube->_transform->SetPosition(Vector(0.0f, 0.0f, 0.0f));
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_worldSceneObjects.push_back(_cube);
@@ -410,14 +411,14 @@ void Application::ShowSceneUI()
 	//XMFLOAT3 shipPosition = XMFLOAT3(_ship->_transform->GetPosition());
 
 	ImGui::Begin("Scene Object Control Panel");
-	/*float cubeVelocityX = _cube->_particle->GetVelocity()._x;
-	float cubeVelocityY = _cube->_particle->GetVelocity()._y;
-	float cubeVelocityZ = _cube->_particle->GetVelocity()._z;
+	float cubeVelocityX = _cube->_body->GetVelocity()._x;
+	float cubeVelocityY = _cube->_body->GetVelocity()._y;
+	float cubeVelocityZ = _cube->_body->GetVelocity()._z;
 
 	ImGui::Text("WoodenCube");
 	ImGui::SliderFloat("Velocity", &cubeVelocityX , -100.0f, 100.0f);
 	ImGui::SliderFloat("Velocity", &cubeVelocityY, -100.0f, 100.0f);
-	ImGui::SliderFloat("Velocity", &cubeVelocityZ, -100.0f, 100.0f);*/
+	ImGui::SliderFloat("Velocity", &cubeVelocityZ, -100.0f, 100.0f);
 
 	//ImGui::SliderFloat("Earth Scale X", &earthScale.x, 0.0f, 50.0f);
 	//ImGui::SliderFloat("Earth Scale Y", &earthScale.y, 0.0f, 50.0f);

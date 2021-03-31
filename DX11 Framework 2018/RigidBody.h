@@ -1,18 +1,20 @@
 #pragma once
 #include "Vector.h"
 #include "Maths.h"
-
+#include "Transform.h"
 
 class RigidBody
 {
 public:
-	
+	RigidBody(Transform* transform);
 
 	void CalculateDerivedData();
 	void CalculateTransformMatrix(Matrix3x4& transform, const Vector& position, const Quaternion& orientation);
 
 	void ClearAccums();
 	void Intergrate(float deltaTime);
+
+	void Move(float deltaTime);
 	
 	void AddForce(const Vector& forceToAdd);
 
@@ -63,7 +65,7 @@ public:
 
 protected:
 
-	//Transform* _transform;
+	Transform* _transform;
 
 
 	Vector _forceAccum;

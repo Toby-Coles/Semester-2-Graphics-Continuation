@@ -27,6 +27,9 @@
     <Filter Include="RigidBody">
       <UniqueIdentifier>{35012739-31e4-49f5-858d-2935b635d4d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Collision Detection">
+      <UniqueIdentifier>{63b4ea41-d537-4e50-8a4a-bcff5dc6056b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imconfig.h">
@@ -106,6 +109,15 @@
     <ClInclude Include="RigidBodyForceGenerator.h">
       <Filter>RigidBody</Filter>
     </ClInclude>
+    <ClInclude Include="CourseCollision.h">
+      <Filter>Collision Detection</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionContacts.h">
+      <Filter>Collision Detection</Filter>
+    </ClInclude>
+    <ClInclude Include="FineCollision.h">
+      <Filter>Collision Detection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -178,6 +190,15 @@
     </ClCompile>
     <ClCompile Include="RigidBodyForceGenerator.cpp">
       <Filter>RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="CourseCollision.cpp">
+      <Filter>Collision Detection</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionContacts.cpp">
+      <Filter>Collision Detection</Filter>
+    </ClCompile>
+    <ClCompile Include="FineCollision.cpp">
+      <Filter>Collision Detection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

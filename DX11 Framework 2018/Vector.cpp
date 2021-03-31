@@ -113,6 +113,11 @@ float Vector::Magnitude(Vector& vec)
 	return sqrt(result);
 }
 
+float Vector::SquareMagnitude()
+{
+	return _x * _x + _y * _y + _z * _z;
+}
+
 void Vector::AddScaledVector(const Vector& vector, float scale)
 {
 	_x += vector._x * scale;

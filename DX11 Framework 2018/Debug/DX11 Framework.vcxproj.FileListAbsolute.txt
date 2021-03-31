@@ -4,5 +4,3 @@ C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Grap
 C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Further-Graphics-DirectX\DX11 Framework 2018\Debug\DX11 Framework.pdb
 C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Assignment\Assignment Upload\DX11 Framework 2018\Debug\DX11 Framework.exe
 C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Assignment\Assignment Upload\DX11 Framework 2018\Debug\DX11 Framework.pdb
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\Debug\DX11 Framework.exe
-C:\Users\tobyc\OneDrive - Staffordshire University\Year 2\Further Games and Graphical Concepts\Github\Semester 2 Graphics Continuation\Semester-2-Graphics-Continuation\DX11 Framework 2018\Debug\DX11 Framework.pdb

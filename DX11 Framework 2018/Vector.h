@@ -39,6 +39,7 @@ public:
 	float Square(); // provides the square of the vector
 	float Distance(const Vector& vec);
 	float Magnitude(Vector& vec1);
+	float SquareMagnitude();
 
 	void AddScaledVector(const Vector& vector, float scale);
 

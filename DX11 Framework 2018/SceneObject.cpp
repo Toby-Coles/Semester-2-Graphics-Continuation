@@ -28,16 +28,14 @@ void SceneObject::Initialise()
 	_appearance = new Appearance();
 	if (isRigidBody)
 	{
-		_body = new RigidBody();
+		_body = new RigidBody(_transform);
 
 	}
 	else
 	{
 		_particle = new ParticleModel(_transform);
 	}
-	//_forces = new ParticleForceRegister();
-
-	//_forces->Add(_particle, _gravity);
+	
 
 
 	//Set initial Values

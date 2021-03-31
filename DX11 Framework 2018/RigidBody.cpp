@@ -1,5 +1,16 @@
 #include "RigidBody.h"
 
+RigidBody::RigidBody(Transform* transform)
+{
+	SetMass(2.0);
+	_accelleration._x = 0.0;  _accelleration._y = 0.0;  _accelleration._z = 0.0;
+	_velocity._x = 0.0;	_velocity._y = 0.0;	_velocity._z = 0.0;
+	_angularDamping = 0.65;
+	_linearDamping = 0.65;
+	
+
+	_transform = transform;
+}
 
 void RigidBody::Intergrate(float deltaTime)
 {
@@ -21,7 +32,7 @@ void RigidBody::Intergrate(float deltaTime)
 	_rotation *= pow(_angularDamping, deltaTime);
 
 	//Update Linear Position
-	_position.AddScaledVector(_velocity, deltaTime);
+	//_position.AddScaledVector(_velocity, deltaTime);
 
 	//Update angular Position
 	_orientation.addScaledVector(_rotation, deltaTime);
@@ -31,6 +42,28 @@ void RigidBody::Intergrate(float deltaTime)
 
 	ClearAccums();
 }
+
+void RigidBody::Move(float deltaTime)
+{
+	Vector previousPosition = *_transform->GetPosition();
+	Vector newPosition;
+	Vector previousVelocity = _velocity;
+
+	//Update world position having added displacement to previous position
+	//MAKE MORE EFFICIENT
+	newPosition._x = previousPosition._x + previousVelocity._x * deltaTime + 0.5f * _accelleration._x * deltaTime * deltaTime;
+	newPosition._y = previousPosition._y + previousVelocity._y * deltaTime + 0.5f * _accelleration._y * deltaTime * deltaTime;
+	newPosition._z = previousPosition._z + previousVelocity._z * deltaTime + 0.5f * _accelleration._z * deltaTime * deltaTime;
+	_transform->SetPosition(newPosition);
+
+	_velocity._x = previousVelocity._x + _accelleration._x * deltaTime;
+	_velocity._y = previousVelocity._y + _accelleration._y * deltaTime;
+	_velocity._z = previousVelocity._z + _accelleration._z * deltaTime;
+
+
+}
+
+
 
 void RigidBody::CalculateDerivedData()
 {
@@ -149,6 +182,7 @@ Vector RigidBody::GetWordSpacePoint(const Vector& point)
 void RigidBody::Update(float deltaTime)
 {
 	Intergrate(deltaTime);
+	Move(deltaTime);
 }
 
 void RigidBody::AddForce(const Vector& forceToAdd)

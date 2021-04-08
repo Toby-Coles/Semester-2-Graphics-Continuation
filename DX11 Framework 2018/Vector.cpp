@@ -39,7 +39,7 @@ Vector Vector::operator-(const Vector& vec)
 	return Vector(_x - vec._x, _y - vec._y, _z - vec._z);
 }
 
-void Vector::operator-=(const Vector& vec)
+void Vector::operator-=( Vector& vec)
 {
 	_x -= vec._x;
 	_y -= vec._y;
@@ -88,6 +88,27 @@ void Vector::operator%=(const Vector& vector)
 	*this = VectorProduct(vector);
 }
 
+float Vector::operator*(const Vector& vector)
+{
+	return _x * vector._x + _y * vector._y + _z * vector._z;
+}
+
+float Vector::operator[](unsigned i) const
+{
+	if (i == 0) return _x;
+	if (i == 1) return _y;
+	return _z;
+}
+
+float& Vector::operator[](unsigned i)
+{
+	if (i == 0) return _x;
+	if (i == 1) return _y;
+	return _z;
+}
+
+
+
 //Vector& Vector::operator=(const Vector& vec)
 //{
 //	// TODO: insert return statement here
@@ -113,9 +134,19 @@ float Vector::Magnitude(Vector& vec)
 	return sqrt(result);
 }
 
+float Vector::Magnitude()
+{
+	return sqrt(_x * _x + _y * _y + _z * _z);
+}
+
 float Vector::SquareMagnitude()
 {
 	return _x * _x + _y * _y + _z * _z;
+}
+
+float Vector::ScalarProduct(Vector& vector)
+{
+	return _x * vector._x + _y * vector._y + _z * vector._z;
 }
 
 void Vector::AddScaledVector(const Vector& vector, float scale)
@@ -123,6 +154,13 @@ void Vector::AddScaledVector(const Vector& vector, float scale)
 	_x += vector._x * scale;
 	_y += vector._y * scale;
 	_z += vector._z * scale;
+}
+
+void Vector::ComponentProductUpdate(const Vector& vector)
+{
+	_x *= vector._x;
+	_y *= vector._y;
+	_z *= vector._z;
 }
 
 void Vector::Invert()

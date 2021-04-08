@@ -47,3 +47,16 @@ void Matrix3x4::SetInverse(const Matrix3x4& matrix)
 		+ matrix.data[4] * matrix.data[1] * matrix.data[11]
 		- matrix.data[0] * matrix.data[5] * matrix.data[11]) * determinant;
 }
+
+void Matrix3x3::SetComponents(const Vector& cOne, const Vector& cTwo, const Vector& cThree)
+{
+	data[0] = cOne._x;
+	data[1] = cTwo._x;
+	data[2] = cThree._x;
+	data[3] = cOne._y;
+	data[4] = cTwo._y;
+	data[5] = cThree._y;
+	data[6] = cOne._z;
+	data[7] = cTwo._z;
+	data[8] = cThree._z;
+}

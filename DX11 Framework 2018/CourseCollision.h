@@ -4,25 +4,25 @@
 
 
 #include <vector>
-#include "Vector.h"
+//#include "Vector.h"
 #include <cstddef>
 #include "RigidBody.h"
 
 
 struct BoundingSphere
 {
-	Vector centre;
+      Vector centre;
 	float radius;
 
 public:
 	//Creates a bounding sphere
-	BoundingSphere(const Vector &centre, float radius);
+	BoundingSphere(const Vector& centre, float radius);
 
 	//Creates a bounding sphere to enclose two given bounding spheres
-	BoundingSphere(const BoundingSphere& one, const BoundingSphere& two);
+	BoundingSphere( BoundingSphere& one,  BoundingSphere& two);
 
 	//Checks if two spheres overlap 
-	bool CheckOverlap(const BoundingSphere* other)const;
+	bool Overlaps( BoundingSphere* other);
 };
 
 
@@ -40,42 +40,58 @@ struct PotentialContact
 //Class uses a binary tree to store bounding volumes
 
 template<class BoundingVolumeClass>
-class BoundingHierarchyNode
+class BoundingVolumeNode
 {
 public:
-	BoundingHierarchyNode* children[2];
+	BoundingVolumeNode* children[2];
 
 	//Holds a single bounding volume holding all the desendants of the node
-	BoundingBolumeClass volume;
+	BoundingVolumeClass volume;
 
 	//Holds the rigid body at this node in the hierarchy
 	RigidBody* body;
 
-	//Holds a single bounding volume holding the descendents of this ndoe
-	BoundingVolumeClass volume;
-
 	//Holds the node above (this) in the tree
-	BoundingHierarchyNode* parent;
+	BoundingVolumeNode* parent;
 
-	~BoundingHierarchyNode();
+	//Checks the potential contacts from this node down in the hierarchy, adding them to an array of contacts
+	//Will return the number of potential contacts if any are found
+	unsigned GetPotentialcontacts(PotentialContact* contacts, unsigned limit) const;
 
+	//Checks the potential contacts between this node and the other, witing them to an array
+	unsigned GetPotentialContactsWith(const BoundingVolumeNode<BoundingVolumeClass>* other, PotentialContact* contacts, unsigned limit) const;
+
+
+	~BoundingVolumeNode();
+
+	BoundingVolumeNode(BoundingVolumeNode* parent, const BoundingVolumeClass& volume, RigidBody* body = NULL)
+		:parent(parent), volume(volume), body(body)
+	{
+		children[0] = children[1];
+	}
 
 	bool IsLeaf()const {
 		return (body != NULL);
 	}
 
-	//Inserts a rigid body with the given bounding volume to the hierarchy.  
-	void Insert(RigidBody* body const BoundingVolumeClass &volume);
 
+	//Checkfs for overlapping nodes in the hierarchy
+	bool CheckOverlap(const BoundingVolumeNode<BoundingVolumeClass>* other) const;
+
+
+
+	//Inserts a rigid body with the given bounding volume to the hierarchy.  
+	void Insert(RigidBody* body, const BoundingVolumeClass& volume);
+};
 	//Remove template
 	template<class BoundingVolumeClass>
-	BoundingHierarchyNode<BoundingVolumeClass>::~BoundingHierarchyNode()
+	BoundingVolumeNode<BoundingVolumeClass>::~BoundingVolumeNode()
 	{
 		//If there is no parent, ignore the sibling
 		if (parent)
 		{
 			//Find sibling
-			BoundingHierarchyNode<BoundingVolumeClass> *sibling;
+			BoundingVolumeNode<BoundingVolumeClass>* sibling;
 			if (parent->children[0] == this)
 			{
 				sibling = parent->children[1];
@@ -94,8 +110,8 @@ public:
 			//Remove the sibling
 			sibling->parent = NULL;
 			sibling->body = NULL;
-			sibling->children[0]= NULL;
-			sibling->children[1]= NULL;
+			sibling->children[0] = NULL;
+			sibling->children[1] = NULL;
 			delete sibling;
 
 			parent->RecalculateBoundingVolume();
@@ -116,16 +132,16 @@ public:
 
 	//Insert Template
 	template<class BoundingVolumeClass>
-	void BoundingHierarchyNode<BoundingVolumeClass>::Insert(RigidBody* newBody, const BoundingVolumeClass& newVolume)
+	void BoundingVolumeNode<BoundingVolumeClass>::Insert(RigidBody* newBody, const BoundingVolumeClass& newVolume) 
 	{
 		//If is a leaf, only option is to create two new children and place the body in one
 		if (IsLeaf())
 		{
 			//Child one is a copy of this
-			children[0] = new BoundingHierarchyNode<BoundingVolumeClass>(this, volume, body);
+			children[0] = new BoundingVolumeNode<BoundingVolumeClass>(this, volume, body);
 
 			//Child two holds the new rigid body
-			children[1] = new new BoundingHierarchyNode<BoundingVolumeClass>(this, newVolume, newBody);
+			children[1] = new new BoundingVolumeNode<BoundingVolumeClass>(this, newVolume, newBody);
 
 			//Now remove the body(volume is no longer a leaf)
 			this->body = NULL;
@@ -136,8 +152,7 @@ public:
 		//Else work out which child keeps the inserted body. Giving it to whatever would grow the least to take it on
 		else
 		{
-			if ((children[0]->volume.GetGrowth(newVolume) <
-				children[1]->volume.GetGrowth(newVolume))
+			if ((children[0]->volume.GetGrowth(newVolume) < children[1]->volume.GetGrowth(newVolume))
 			{
 				children[0]->Insert(newBody, newVolume);
 			}
@@ -149,43 +164,45 @@ public:
 	}
 
 
-	//Checks the potential contacts from this node down in the hierarchy, adding them to an array of contacts
-	//Will return the number of potential contacts if any are found
-	unsigned GetPotentialcontacts(PotentialContact* contacts, unsigned limit) const;
+
+
+
+
+
 
 	//Overlap Template
 	template<class BoundingVolumeClass>
-	bool BoundingHierarchyNode<BoundingVolumeClass>::overlaps(
-		const BoundingHierarchyNode<BoundingVolumeClass>* other) const
+	bool BoundingVolumeNode<BoundingVolumeClass>::CheckOverlap(
+		const BoundingVolumeNode<BoundingVolumeClass>* other) const
 	{
 		return volume->overlaps(other->volume);
 	}
 
 	template<class BoundingVolumeClass>
-	bool BoundingHierarchyNode<BoundingVolumeClass>GetPotentialcontacts(PotentialContact* contacts, unsigned limit)const;
+	unsigned BoundingVolumeNode<BoundingVolumeClass>::GetPotentialcontacts(PotentialContact* contacts, unsigned limit)const
 	{
 		//Early exit if there is no room for contact, or at a leaf node
 		if (IsLeaf || limit == 0)
 		{
-			return;
+			return 0;
 		}
 
 		//Get the potential contacts of one of our children with the other 
 		return children[0]->GetPotentialContactsWith(children[1], constacts, limit);
 	}
 
+
 	template<class BoundingVolumeClass>
-	unsigned BoundingHierarchyNode<BoundingVolumeClass>::GetPotentialContactsWith(const BoundingHierarchyNode<BoundingVolumeClass>* other, PotentialContact* contacts,
-		unsigned limit)const;
+	unsigned BoundingVolumeNode<BoundingVolumeClass>::GetPotentialContactsWith(const BoundingVolumeNode<BoundingVolumeClass>* other, PotentialContact* contacts, unsigned limit)const
 	{
 		//Early exit if there is no overlap or no space to report contacts
-		if (!overlaps(other) ||limit == 0) 
+		if (!overlaps(other) || limit == 0)
 		{
 			return 0;
 		}
 
 		//If both leaf nodes, then report potential contact (return 1)
-		if (IsLeaf() &&other->isLeaf())
+		if (IsLeaf() && other->isLeaf())
 		{
 			contacts->body[0] = body;
 			contacts->body[1] = other->body;
@@ -194,18 +211,20 @@ public:
 
 		//Determine which node to descend into, if either is a leaf then descend the other, if both are branches we use the largest
 		if (other->IsLeaf() || !IsLeaf() && volume->GetSize() >= other->volume->GetSize()))
-		{
-		unsigned count = children[0]->GetPotentialContactsWith(other, contacts, limit);
+			{
+				unsigned count = children[0]->GetPotentialContactsWith(other, contacts, limit);
 
-		//Check there is enough slots for the other side of the tree
-		if (limit > count)
-		{
-			return count + children[1]->GetPotentialContactsWith(other, contacts + count, limit - count);
-		}
-		else {
-			return count;
-		}
-		}
+				//Check there is enough slots for the other side of the tree
+				if (limit > count)
+				{
+					return count + children[1]->GetPotentialContactsWith(other, contacts + count, limit - count);
+				}
+				else
+				{
+					return count;
+				}
+			}
+	
 		else
 		{
 			//Recurse into other node
@@ -224,9 +243,9 @@ public:
 		}
 	}
 
-private:
-
-};
 
 
 #endif
+
+
+

@@ -111,9 +111,19 @@ void RigidBody::SetInertiaTensor(const Matrix3x3& inertiaTensor)
 	_inverseInertiaTensor.SetInverse(inertiaTensor);
 }
 
+void RigidBody::GetInverseInertiaTensorWorld(Matrix3x3 *tensor)
+{
+	*tensor = _inverseInertiaTensorWorld;
+}
+
 void RigidBody::SetPosition(Vector& position)
 {
 	_position = position;
+}
+
+void RigidBody::GetPosition(Vector *vector)
+{
+	*vector = RigidBody::_position;
 }
 
 void RigidBody::SetRotation(Vector& rotation)
@@ -138,6 +148,21 @@ void RigidBody::GetAcceleration(Vector* accelleration)
 
 void RigidBody::SetLinearDamping(const float damping)
 {
+}
+
+void RigidBody::SetAwake(const bool awake)
+{
+	if (awake) {
+		isAwake = true;
+
+		motion = 0.2 * 2.0f; //FIX LATER
+	}
+	else
+	{
+		isAwake = false;
+		_velocity.Clear();
+		_rotation.Clear();
+	}
 }
 
 
@@ -172,6 +197,16 @@ void RigidBody::AddForceToBodyPoint(const Vector& force, const Vector& point)
 	Vector pt = GetWordSpacePoint(point);
 	AddForceToPoint(force, pt);
 
+}
+
+void RigidBody::AddVelocity(Vector& deltaVelocity)
+{
+	_velocity += deltaVelocity;
+}
+
+void RigidBody::AddRotation(Vector& rotationChange)
+{
+	_rotation += rotationChange;
 }
 
 Vector RigidBody::GetWordSpacePoint(const Vector& point)

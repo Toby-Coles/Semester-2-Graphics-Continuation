@@ -145,7 +145,7 @@ public:
 };
 
 /**
-* Inline function that creates a transform matrix from a
+* Inline function that creates a   matrix from a
 * position and orientation.
 */
 static inline void CalculateTransformMatrixColumnMajor(XMMATRIX& transformMatrix,
@@ -292,6 +292,15 @@ public:
 		data[8] = 1 - (2 * q.i * q.i + 2 * q.j * q.j);
 	}
 
+	void SetSkewSymmetric(const Vector vector) {
+		data[0] = data[4] = data[8] = 0;
+		data[1] = -vector._z;
+		data[2] = vector._y;
+		data[3] = vector._z;
+		data[5] = -vector._x;
+		data[6] = -vector._y;
+		data[7] = vector._x;
+	}
 
 	// Matrix3 Multiplier overload (Transform the given vector by matrix )
 	Vector operator*(const Vector& vector)const {
@@ -347,6 +356,21 @@ public:
 		data[8] = t3;
 	}
 
+	//Multiply by a given scalar
+	void operator*=(const float scalar)
+	{
+		data[0] *= scalar; data[1] *= scalar; data[2] *= scalar;
+		data[3] *= scalar; data[4] *= scalar; data[5] *= scalar;
+		data[6] *= scalar; data[7] *= scalar; data[8] *= scalar;
+	}
+
+	//Component-wise addition of given matrices
+	void operator+=(const Matrix3x3& o) {
+		data[0] += o.data[0]; data[1] += o.data[1]; data[2] += o.data[2];
+		data[3] += o.data[3]; data[4] += o.data[4]; data[5] += o.data[5];
+		data[6] += o.data[6]; data[7] += o.data[7]; data[8] += o.data[8];
+	}
+
 	
 	Vector transform(const Vector& vector) const
 	{
@@ -373,6 +397,16 @@ public:
 		return result;
 	}
 
+	Vector TransformTranspose(const Vector& vector) const {
+		return Vector(
+			vector._x * data[0] + vector._y * data[3] + vector._z * data[6],
+			vector._x * data[1] + vector._y * data[4] + vector._z * data[7],
+			vector._x * data[2] + vector._y * data[5] + vector._z * data[8]
+		);
+	}
+
+	void SetComponents(const Vector &cOne, const Vector &cTwo, const Vector &cThree);
+	
 
 
 	float data[9];
@@ -409,6 +443,12 @@ public:
 	void Invert() {
 		SetInverse(*this);
 	}
+
+	////Transforms the given vector by the matrix
+	//Vector transform(const Vector& vector)const {
+	//	return (*this) * vector;
+
+	//}
 
 	void SetOrientationAndPosition(const Quaternion& q, const Vector& pos) {
 
@@ -451,6 +491,10 @@ public:
 		return transform.TransformInverse(world);
 	}
 
+	//Gets a vector representing one axis in the matrix
+	Vector GetAxisVector(int i)const  {
+		return Vector(data[i], data[i + 4], data[i + 8]);
+	}
 	Vector TransformDirection(const Vector& vector) const
 	{
 		return Vector(

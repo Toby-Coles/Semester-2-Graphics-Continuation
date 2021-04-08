@@ -1,13 +1,15 @@
 #include "CourseCollision.h"
 
-BoundingSphere(const Vector& centre, float radius)
+
+
+BoundingSphere::BoundingSphere(const Vector& centre, float radius)
 {
 }
 
-BoundingSphere::BoundingSphere(const BoundingSphere& one, const BoundingSphere& two)
+BoundingSphere::BoundingSphere(BoundingSphere& one,  BoundingSphere& two)
 {
-	Vector CenterOffset = two.centre = one.centre;
-	float distance = centerOffset.SquareMagnitude();
+	Vector centreOffset = two.centre - one.centre;
+	float distance = centreOffset.SquareMagnitude();
 	float radiusDiff = two.radius - one.radius;
 
 	//Check if the larger sphere encloses the smaller one 
@@ -40,8 +42,10 @@ BoundingSphere::BoundingSphere(const BoundingSphere& one, const BoundingSphere& 
 	}
 }
 
-bool BoundingSphere::CheckOverlap(const BoundingSphere* other) const
+bool BoundingSphere::Overlaps( BoundingSphere* other) 
 {
 	float distanceSq = (centre - other->centre).SquareMagnitude();
 	return distanceSq < (radius + other->radius)* (radius + other->radius);
 }
+
+

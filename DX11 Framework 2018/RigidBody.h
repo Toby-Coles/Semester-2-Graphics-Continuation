@@ -24,6 +24,8 @@ public:
 	//Adds a force to a given point, directino given in world coords, application in body space. 
 	void AddForceToBodyPoint(const Vector& force, const Vector& point);
 
+	void AddVelocity(Vector &deltaVelocity);
+	void AddRotation(Vector& rotationChange);
 	
 	Vector GetWordSpacePoint(const Vector& point);
 	void Update(float deltaTime);
@@ -37,11 +39,11 @@ public:
 
 	void SetInertiaTensor(const Matrix3x3& inertiaTensor);
 	Matrix3x3 GetInertiaTensor() const { return _inverseInertiaTensor; }
-
+	void GetInverseInertiaTensorWorld(Matrix3x3 *tensor);
 
 	void SetPosition(Vector& position);
 	Vector GetPosition() const { return _position; }
-
+	void GetPosition(Vector *vector);
 	void SetRotation(Vector& rotation);
 	Vector GetRotation() const { return _rotation; }
 
@@ -57,9 +59,12 @@ public:
 	void SetVelocity(const float x, const float y, const float z);
 	Vector GetVelocity()const { return _velocity; }
 
+	Vector GetLastFrameAccelleration() const { return _lastFrameAccelleration; }
 
 	void SetLinearDamping(const float damping);
 
+	bool GetAwake() const { return isAwake; }
+	void SetAwake(const bool awake);
 	
 	
 
@@ -79,6 +84,8 @@ protected:
 	//Holds the inverse mass of the rigid body
 	float _inverseMass;
 
+	float motion;
+
 	float _linearDamping;
 
 	Vector _position;
@@ -92,6 +99,11 @@ protected:
 	Matrix3x3 _inverseInertiaTensor;
 
 	Matrix3x3 _inverseInertiaTensorWorld;
+
+	bool isAwake;
+
+	bool canSleep;
+
 
 private:
 

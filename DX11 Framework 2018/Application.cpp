@@ -45,7 +45,11 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_dragForce = new ParticleDrag(k1, k2);
 	//_gravityForce = new ParticleGravity(_gravity);
 	
+	_contactResolver = new ContactResolver(10);
 
+	_collisionData = new CollisionData();
+	
+	
 	_camera1->SetCameraPosition(XMFLOAT3(0.0f, 0.0f, 15.5f));
 	_camera1->LookAt(_camera1->GetCameraPosition(), XMFLOAT3(0.0f, 0.0f, 1.0f), _camera1->GetCameraUp());
 	_camera1->SetLens(90.0f, 1920 /1080, 0.01f, 1000.0f);
@@ -64,11 +68,33 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	//RIGID TEST//
 	_cube = new SceneObject(appGFX, true);
 	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
-	_cube->_body->SetPosition(Vector(0.0f, 0.0f, 0.0f));
-	_cube->_transform->SetPosition(Vector(0.0f, 0.0f, 0.0f));
+	//_cube->_body->SetPosition(Vector(0.0f, 0.0f, 10.0f));
+	_cube->_transform->SetPosition(Vector(0.0f, 0.0f, 10.0f));
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
+	_cube->_body->SetAwake(true);
+	_box1Primitive =  CollisionBox();
+	_box1Primitive.body = _cube->_body;
+
 	_worldSceneObjects.push_back(_cube);
+
+	//_contactArray->body[0] = _cube->_body;
+	
+
+	_cube2 = new SceneObject(appGFX, true);
+	_cube2->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
+	//_cube2->_body->SetPosition(Vector(0.0f, 0.0f, 10.0f));
+	_cube2->_transform->SetPosition(Vector(-10.0f, 0.0f, 0.0f));
+	_cube2->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
+	_cube2->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
+	_cube2->_body->SetAwake(true);
+	_box2Primitive = CollisionBox();
+	_box2Primitive.body = _cube2->_body;
+	_worldSceneObjects.push_back(_cube2);
+	
+	
+	_collisionData->contactArray = _contactArray;
+	//_collisionData->contactArray->SetBody(_cube->_body, _cube2->_body, 0.00, 0.00);
 
 	/*_particleForces->Add(_cube->GetParticle(), _particleGravityForce);
 	_particleForces->Add(_cube->GetParticle(), _dragForce);*/
@@ -87,20 +113,20 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	appGFX->SetEyePosW(_camera1->GetCameraPosition());
 
 	
-	//Create the object and initialise the variables for the skybox(skysphere)
-	_skyMap = new SceneObject(appGFX, false);
-	_skyMap->_appearance->LoadModelMesh("Models/sphere2.obj", appGFX->GetDevice());
-	_skyMap->_transform->SetPosition(0.0f, 0.0f, 5.5f);
-	_skyMap->_transform->SetScale(100.0f, 100.0f, 100.0f);
-	_skyMap->_transform->SetRotation(0.0f, 0.0f, 0.0f);
-	_skyMap->_appearance->GenerateTexture(L"Textures/stars_map.dds", appGFX->GetDevice());
+	////Create the object and initialise the variables for the skybox(skysphere)
+	//_skyMap = new SceneObject(appGFX, false);
+	//_skyMap->_appearance->LoadModelMesh("Models/sphere2.obj", appGFX->GetDevice());
+	//_skyMap->_transform->SetPosition(0.0f, 0.0f, 5.5f);
+	//_skyMap->_transform->SetScale(100.0f, 100.0f, 100.0f);
+	//_skyMap->_transform->SetRotation(0.0f, 0.0f, 0.0f);
+	//_skyMap->_appearance->GenerateTexture(L"Textures/stars_map.dds", appGFX->GetDevice());
 
-	//Creates the ground plane
-	_plane = new GroundPlane(appGFX);
-	_plane->GeneratePlane(30.0f, 30.0f, 8, 8);
-	_plane->_transform->SetPosition (0.0f, -10.0f, 0.0f);
-	_plane->_appearance->GenerateTexture(L"Textures/planeSurface.dds", appGFX->GetDevice());
-	_showGridPlane = false;
+	////Creates the ground plane
+	//_plane = new GroundPlane(appGFX);
+	//_plane->GeneratePlane(30.0f, 30.0f, 8, 8);
+	//_plane->_transform->SetPosition (0.0f, -10.0f, 0.0f);
+	//_plane->_appearance->GenerateTexture(L"Textures/planeSurface.dds", appGFX->GetDevice());
+	//_showGridPlane = false;
 	
 	//Initialise the timer in the program
 	_timer = new TimeKeep();
@@ -117,6 +143,62 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	return S_OK;
 }
 
+
+void Application::Update()
+{
+	appGFX->UpdateLighting();
+
+	// Update our time
+	_timer->Tick();
+	float deltaTime = _timer->DeltaTime();
+
+	//Updates the rotation values so they are constant
+	_rotation += (_rotationSpeed * deltaTime);
+	/*_earthRotation += (_earthRotationSpeed * deltaTime);*/
+
+
+	//Sets the EyePosw for rendering to that of the active camera
+	appGFX->SetEyePosW(appGFX->GetCurrentCamera()->GetCameraPosition());
+
+	//Update forces acting upon particles 
+	_particleForces->UpdateForces(deltaTime);
+	
+
+	
+
+	//Update Scene Objects
+	for each (SceneObject * object in _worldSceneObjects)
+	{
+		object->Update(deltaTime);
+		//object->_particle->IntergrateMovement(deltaTime);
+	}
+
+	CollisionDetector::BoxAndBox(_box1Primitive, _box2Primitive, _collisionData);
+	_contactResolver->ResolveContacts(_collisionData->contactArray, _collisionData->contactCount, deltaTime);
+
+
+	/*if (_cube->_transform->GetPosition()->_y <= -10.0f)
+	{
+		_cube->_particle->AddForce(Vector(0.0f, 25.81f, 0.0f));
+	}*/
+
+
+	//Constantly sets the skymaps position reletive to the active camera to give the illusion of it never moving
+	/*_skyMap->_transform->SetPosition(appGFX->GetCurrentCamera()->GetCameraPosition().x, appGFX->GetCurrentCamera()->GetCameraPosition().y, appGFX->GetCurrentCamera()->GetCameraPosition().z);
+	_skyMap->Update(deltaTime);
+
+	_plane->Update(deltaTime);*/
+
+	_isWireFrame = appGFX->UpdateWireFrame();
+
+	//Updates all camera control inputs
+	UpdateCameraControlls(deltaTime);
+	UpdateObjectControlls(deltaTime);
+
+	//Updates ship control inputs
+	/*UpdateShipControlls(deltaTime);*/
+
+}
 
 HRESULT Application::InitVertexBuffer()
 {
@@ -292,57 +374,6 @@ void Application::Cleanup()
 	
 }
 
-void Application::Update()
-{
-	appGFX->UpdateLighting();
-
-	// Update our time
-	_timer->Tick();
-	float deltaTime = _timer->DeltaTime();
-
-	//Updates the rotation values so they are constant
-	_rotation += (_rotationSpeed * deltaTime);
-	/*_earthRotation += (_earthRotationSpeed * deltaTime);*/
-
-
-	//Sets the EyePosw for rendering to that of the active camera
-	appGFX->SetEyePosW(appGFX->GetCurrentCamera()->GetCameraPosition());
-
-	//Update forces acting upon particles 
-	_particleForces->UpdateForces(deltaTime);
-
-
-
-	/*_earth->_transform->SetRotation (XMFLOAT3(0.0f, _earthRotation, 0.0f ));*/
-
-	//Update Scene Objects
-	for each (SceneObject* object in _worldSceneObjects)
-	{
-		object->Update(deltaTime);
-		//object->_particle->IntergrateMovement(deltaTime);
-	}
-
-
-	/*if (_cube->_transform->GetPosition()->_y <= -10.0f)
-	{
-		_cube->_particle->AddForce(Vector(0.0f, 25.81f, 0.0f));
-	}*/
-	//Constantly sets the skymaps position reletive to the active camera to give the illusion of it never moving
-	_skyMap->_transform->SetPosition(appGFX->GetCurrentCamera()->GetCameraPosition().x, appGFX->GetCurrentCamera()->GetCameraPosition().y, appGFX->GetCurrentCamera()->GetCameraPosition().z);
-	_skyMap->Update(deltaTime);
-
-	_plane->Update(deltaTime);
-
-	_isWireFrame = appGFX->UpdateWireFrame();
-
-	//Updates all camera control inputs
-	UpdateCameraControlls(deltaTime);
-	UpdateObjectControlls(deltaTime);
-
-	//Updates ship control inputs
-	/*UpdateShipControlls(deltaTime);*/
-	
-}
 void Application::UpdateObjectControlls(float deltaTime) {
 	
 	if (GetAsyncKeyState('T')) {
@@ -449,7 +480,7 @@ void Application::ShowSceneUI()
 		}
 	}
 
-	XMFLOAT3 planeScale = XMFLOAT3(_plane->_transform->GetScale()->_x, _plane->_transform->GetScale()->_y, _plane->_transform->GetScale()->_z);
+	/*XMFLOAT3 planeScale = XMFLOAT3(_plane->_transform->GetScale()->_x, _plane->_transform->GetScale()->_y, _plane->_transform->GetScale()->_z);
 
 
 	ImGui::SliderFloat("Grid Plane Scale X", &planeScale.x, 0.0f, 50.0f);
@@ -457,7 +488,7 @@ void Application::ShowSceneUI()
 	ImGui::SliderFloat("Grid Plane Scale Z", &planeScale.z, 0.0f, 50.0f);
 	ImGui::End();
 
-	_plane->_transform->SetScale(planeScale.x, planeScale.y, planeScale.z);
+	_plane->_transform->SetScale(planeScale.x, planeScale.y, planeScale.z);*/
 	ImGui::Begin("Controls");
 	ImGui::Text("===/ Camera \===");
 	ImGui::Text("W: Fly Fowards");
@@ -501,11 +532,11 @@ void Application::Draw()
 		object->Draw();
 	}
 
-	if (_showGridPlane)
-	{
-		_plane->Draw(_plane->GetPlaneVb(), _plane->GetPlaneIb(), _plane->GetPlaneIndexCount());
+	//if (_showGridPlane)
+	//{
+	//	_plane->Draw(_plane->GetPlaneVb(), _plane->GetPlaneIb(), _plane->GetPlaneIndexCount());
 
-	}
+	//}
 
 	appGFX->RunLightingControls();
 
@@ -516,7 +547,7 @@ void Application::Draw()
 
 	appGFX->SetPixelShader(appGFX->GetSkyboxPixelShader());
 
-	_skyMap->Draw();
+	/*_skyMap->Draw();*/
 
 	//skyMap->Draw();
 	_ui.FrameEnd();

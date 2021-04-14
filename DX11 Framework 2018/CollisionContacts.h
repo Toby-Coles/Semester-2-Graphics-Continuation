@@ -4,6 +4,7 @@
 #include "Vector.h"
 #include "RigidBody.h"
 
+class ContactResolver;
 
 class CollisionContact
 {
@@ -38,6 +39,8 @@ public:
 
 	//Calculates the orthonormal basis for the contact point
 	void CalculateContactBasis();
+
+	void GenerateContacts(unsigned int contactCount);
 
 	Vector CalculateFrictionlessImpulse(Matrix3x3* inverseInertiaTensor);
 	Vector CalculateFrictionImpulse(Matrix3x3* inverseInertiaTensor);
@@ -79,6 +82,9 @@ class ContactResolver
 {
 public:
 
+	ContactResolver(unsigned iterations, float velocityEpsilon = (float) 0.01f, float positionEpsilon = (float)0.01f);
+
+
 	void ResolveContacts(CollisionContact *contactArray, unsigned contactCount, float deltaTime);
 
 	void PrepareContacts(CollisionContact* contactArray, unsigned contactCount, float deltaTime);
@@ -106,9 +112,10 @@ private:
 
 };
 
-
-
-
+class ContactGenerator {
+public: 
+	virtual unsigned AddContact(CollisionContact* contact, unsigned limit);
+};
 
 
 #endif // !COLLISION_CONTACTS

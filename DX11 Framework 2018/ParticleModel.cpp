@@ -76,6 +76,7 @@ void ParticleModel::Move(float deltaTime)
 	Vector newPosition;
 	Vector previousVelocity = _velocity;
 
+	
 	//Update world position having added displacement to previous position
 	//MAKE MORE EFFICIENT
 	newPosition._x = previousPosition._x + previousVelocity._x * deltaTime + 0.5f * _accelleration._x * deltaTime * deltaTime;

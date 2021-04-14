@@ -6,7 +6,8 @@ Transform::Transform()
 	//mRotation = new Vector();
 	//mScale = new Vector();
 
-	mPosition = Vector(0, 0, 0);
+	//mPosition = Vector(0, 0, 0);
+	SetPosition(0.0f, 0.0f, 0.0f);
 	mScale = Vector(0, 0, 0);
 		mRotation = Vector(0, 0, 0);
 

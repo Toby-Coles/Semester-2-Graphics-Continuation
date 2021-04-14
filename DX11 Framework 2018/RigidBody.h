@@ -51,7 +51,7 @@ public:
 	void SetAcceleration(const float x, float y, float z);
 	void GetAcceleration(Vector* accelleration);
 
-
+	Matrix3x4 GetTransform() const { return _transformMatrix; }
 	Quaternion GetOrientation() const { return _orientation; }
 	void SetOrientation(Quaternion orientation);
 
@@ -66,11 +66,11 @@ public:
 	bool GetAwake() const { return isAwake; }
 	void SetAwake(const bool awake);
 	
-	
+
+	Transform* _transform;
 
 protected:
 
-	Transform* _transform;
 
 
 	Vector _forceAccum;

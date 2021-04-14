@@ -10,10 +10,18 @@ RigidBody::RigidBody(Transform* transform)
 	
 
 	_transform = transform;
+	
+	//position = *_transform->GetPosition();
+	SetPosition(*_transform->GetPosition());
+	CalculateDerivedData();
+	ClearAccums();
+	
 }
 
 void RigidBody::Intergrate(float deltaTime)
 {
+	//_position = *_transform->GetPosition();
+
 	//Calculate Linear accelleration from forces
 	_lastFrameAccelleration = _accelleration;
 	_lastFrameAccelleration.AddScaledVector(_forceAccum, _inverseMass);
@@ -41,6 +49,7 @@ void RigidBody::Intergrate(float deltaTime)
 
 
 	ClearAccums();
+	
 }
 
 void RigidBody::Move(float deltaTime)
@@ -145,6 +154,8 @@ void RigidBody::GetAcceleration(Vector* accelleration)
 {
 	*accelleration = RigidBody::_accelleration;
 }
+
+
 
 void RigidBody::SetLinearDamping(const float damping)
 {

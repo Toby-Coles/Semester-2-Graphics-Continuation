@@ -51,6 +51,12 @@ void CollisionContact::CalculateContactBasis()
 					
 }
 
+void CollisionContact::GenerateContacts(unsigned int contactCount)
+{
+	unsigned limit = contactCount;
+	/*CollisionContact* nextContact = contacts; */
+}
+
 Vector CollisionContact::CalculateFrictionlessImpulse(Matrix3x3* inverseInertiaTensor)
 {
 	Vector impulseContact;
@@ -404,6 +410,16 @@ void CollisionContact::SwapBodies()
 	RigidBody *temp = body[0];
 	body[0] = body[1];
 	body[1] = temp;
+}
+
+ContactResolver::ContactResolver(unsigned iterations, float velocityEpsilon, float positionEpsilon)
+{
+	_positionIterations = iterations;
+	_velocityIterations = iterations;
+	_velocityEpsilon = velocityEpsilon;
+	_positionEpsilon = positionEpsilon;
+
+
 }
 
 void ContactResolver::ResolveContacts(CollisionContact* contactArray, unsigned contactCount, float deltaTime)

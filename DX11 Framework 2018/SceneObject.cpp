@@ -26,6 +26,7 @@ void SceneObject::Initialise()
 {
 	_transform = new Transform();
 	_appearance = new Appearance();
+
 	if (isRigidBody)
 	{
 		_body = new RigidBody(_transform);

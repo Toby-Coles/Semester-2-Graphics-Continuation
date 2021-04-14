@@ -51,6 +51,9 @@ struct CollisionData
 class ColliderPrimitive
 {
 public:
+
+	friend class CollisionDetector;
+	
 	RigidBody *body;
 	Matrix3x4 offset;
 
@@ -65,6 +68,8 @@ public:
 	const Matrix3x4& GetTransform()const {
 		return transform;
 	}
+
+	void CalculateTransform();
 
 	Matrix3x4 transform;
 
@@ -109,5 +114,10 @@ public:
 		const CollisionBox &box2,
 		CollisionData *data);
 };
+
+//class IntersectionTests
+//{
+//	static bool BoxAndBox(const CollisionBox& box1, const CollisionBox& box2);
+//};
 
 #endif

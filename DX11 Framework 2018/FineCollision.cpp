@@ -10,7 +10,7 @@ void FillPointFaceBoxBox(
 )
 {
 	//Called when a vertex from box2 is in contact with box1
-	CollisionContact* contact = data->contacts;
+	CollisionContact* contact = data->contactArray;
 
 	//Work out which of the two faces
 	Vector normal = box1.GetAxis(best);
@@ -193,7 +193,7 @@ unsigned CollisionDetector::BoxAndPlane(const CollisionBox& box, const Collision
 	 if (!TryAxis( box1,  box2,  (axis), toCentre, (index), pen, best)) return 0;
 
 
-unsigned CollisionDetector::BoxAndBox(const CollisionBox& box1, const CollisionBox& box2, CollisionData* data)
+unsigned CollisionDetector::BoxAndBox(const CollisionBox &box1, const CollisionBox &box2, CollisionData* data)
 {
 	//find the vector between the centeres of the boxes
 	Vector toCentre = box2.GetAxis(3) - box1.GetAxis(3);
@@ -294,3 +294,8 @@ unsigned CollisionDetector::BoxAndBox(const CollisionBox& box1, const CollisionB
 
 }
 #undef CHECK_OVERLAP
+
+void ColliderPrimitive::CalculateTransform()
+{
+	transform = body->GetTransform() * offset;
+}

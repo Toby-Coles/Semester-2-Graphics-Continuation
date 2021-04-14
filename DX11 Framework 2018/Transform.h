@@ -27,6 +27,7 @@ public:
 	XMMATRIX UpdateTransforms();
 	XMFLOAT4X4 GetTransform();
 	Vector* GetPosition();
+
 	Vector* GetRotation();
 	Vector* GetScale();
 	

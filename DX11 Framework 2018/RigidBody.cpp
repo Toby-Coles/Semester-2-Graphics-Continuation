@@ -69,7 +69,7 @@ void RigidBody::Move(float deltaTime)
 	_velocity._y = previousVelocity._y + _accelleration._y * deltaTime;
 	_velocity._z = previousVelocity._z + _accelleration._z * deltaTime;
 
-
+	_position = newPosition;
 }
 
 
@@ -87,6 +87,7 @@ void RigidBody::CalculateDerivedData()
 void RigidBody::CalculateTransformMatrix(Matrix3x4& transform, const Vector& position, const Quaternion& orientation)
 {
 
+	//SET TO TRANSFORM FROM PASS IN 
 	_transformMatrix.data[0] = 1 - 2 * orientation.j * orientation.j -
 		2 * orientation.k * orientation.k;
 	_transformMatrix.data[1] = 2 * orientation.i * orientation.j -

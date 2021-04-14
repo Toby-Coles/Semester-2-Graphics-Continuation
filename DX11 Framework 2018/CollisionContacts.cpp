@@ -258,9 +258,12 @@ void CollisionContact::ApplyVelocityChange(Vector velocity[2], Vector rotation[2
 	if (body[1])
 	{
 		Vector impulsiveTorque = _relativeContactPos[1] % impulse;
-		rotation[0] = inverseInertiaTensor[1].transform(impulsiveTorque);
-		velocity[0].Clear();
-		velocity[0].AddScaledVector(impulse, -body[1]->GetInverseMass());
+		rotation[1] = inverseInertiaTensor[1].transform(impulsiveTorque);
+		velocity[1].Clear();
+		velocity[1].AddScaledVector(impulse, -body[1]->GetInverseMass());
+
+		body[1]->AddVelocity(velocity[1]);
+		body[1]->AddRotation(rotation[1]);
 	}
 }
 
@@ -484,7 +487,7 @@ void ContactResolver::AdjustPositions(CollisionContact* contactArray, unsigned c
 		for (i = 0; i < contactCount; i++) {
 
 			//Check each body in the contact
-			for (unsigned b = 0; b < 2; b++) {
+			for (unsigned b = 0; b < 2; b++) if (contactArray[i].body[b]) {
 
 				//Check for a match with each body in the new contact
 				for (unsigned d = 0; d < 2; d++) {
@@ -507,6 +510,8 @@ void ContactResolver::AdjustVelocities(CollisionContact* contactArray, unsigned 
 {
 	Vector velocity[2], rotation[2];
 	Vector deltaVelocity;
+
+	_velocityIterationsUsed = 0;
 
 	//iteratively handle impacts in order of severity(Depth)
 	while (_velocityIterationsUsed < _velocityIterations) {
@@ -550,6 +555,7 @@ void ContactResolver::AdjustVelocities(CollisionContact* contactArray, unsigned 
 				}
 			}
 		}
+		_velocityIterationsUsed++;
 	}
-	_velocityIterationsUsed++;
+	
 }

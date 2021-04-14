@@ -73,7 +73,10 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_cube->_body->SetAwake(true);
+
 	_box1Primitive =  CollisionBox();
+	_box1Primitive._halfSize = Vector(1.0f, 1.0f, 1.0f);
+
 	_box1Primitive.body = _cube->_body;
 
 	_worldSceneObjects.push_back(_cube);
@@ -84,12 +87,15 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_cube2 = new SceneObject(appGFX, true);
 	_cube2->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	//_cube2->_body->SetPosition(Vector(0.0f, 0.0f, 10.0f));
-	_cube2->_transform->SetPosition(Vector(-10.0f, 0.0f, 0.0f));
+	_cube2->_transform->SetPosition(Vector(0.0f, 0.0f, -10.0f));
 	_cube2->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube2->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_cube2->_body->SetAwake(true);
 	_box2Primitive = CollisionBox();
 	_box2Primitive.body = _cube2->_body;
+
+	_box2Primitive._halfSize = Vector(1.0f, 1.0f, 1.0f);
+
 	_worldSceneObjects.push_back(_cube2);
 	
 	
@@ -172,6 +178,11 @@ void Application::Update()
 		object->Update(deltaTime);
 		//object->_particle->IntergrateMovement(deltaTime);
 	}
+
+	_box1Primitive.CalculateTransform();
+	_box2Primitive.CalculateTransform();
+
+	_collisionData->Reset(_maxContacts);
 
 	CollisionDetector::BoxAndBox(_box1Primitive, _box2Primitive, _collisionData);
 	_contactResolver->ResolveContacts(_collisionData->contactArray, _collisionData->contactCount, deltaTime);
@@ -385,6 +396,16 @@ void Application::UpdateObjectControlls(float deltaTime) {
 		
 		_cube->_body->AddForce(Vector(-10.0f, 0.0f, 0.0f));
 	}
+
+	if (GetAsyncKeyState('G')) {
+
+		//_cube->_particleModel->MoveConstVelocity(deltaTime);
+		_cube->_body->AddForce(Vector(0.0f, 0.0f, 10.0f));
+	}
+	if (GetAsyncKeyState('H')) {
+
+		_cube->_body->AddForce(Vector(0.0f, 0.0f, -10.0f));
+	}
 	
 }
 
@@ -486,9 +507,11 @@ void Application::ShowSceneUI()
 	ImGui::SliderFloat("Grid Plane Scale X", &planeScale.x, 0.0f, 50.0f);
 	
 	ImGui::SliderFloat("Grid Plane Scale Z", &planeScale.z, 0.0f, 50.0f);
-	ImGui::End();
+	
 
 	_plane->_transform->SetScale(planeScale.x, planeScale.y, planeScale.z);*/
+
+	ImGui::End();
 	ImGui::Begin("Controls");
 	ImGui::Text("===/ Camera \===");
 	ImGui::Text("W: Fly Fowards");

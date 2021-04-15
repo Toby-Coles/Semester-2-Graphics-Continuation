@@ -227,6 +227,7 @@ unsigned CollisionDetector::BoxAndBox(const CollisionBox &box1, const CollisionB
 	//Ensure there is a result
 	assert(best != 0xffffff);
 
+	OutputDebugStringA("Colliding\n");
 	//Now a collision has been confirmed, and we know which axes gives the smallest pen,
 	//it must be delt with depending on the case
 	if (best < 3)
@@ -239,7 +240,7 @@ unsigned CollisionDetector::BoxAndBox(const CollisionBox &box1, const CollisionB
 	else if (best <6)
 	{
 		//Vertex of box1 on a face of box2 
-		FillPointFaceBoxBox(box2, box1, toCentre, data, best, pen);
+		FillPointFaceBoxBox(box2, box1, toCentre * -1.0f, data, best, pen);
 		data->AddContacts(1);
 		return 1;
 	}

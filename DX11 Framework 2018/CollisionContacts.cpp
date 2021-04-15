@@ -16,7 +16,7 @@ void CollisionContact::CalculateContactBasis()
 	if (fabs(_contactNormal._x) > fabs(_contactNormal._y))
 	{
 		//Scaling factor to ensure normalization
-		const float scalingFactor = (float)1.0f / sqrt(_contactNormal._z * _contactNormal._z + _contactNormal._x * _contactNormal._x);
+		const float scalingFactor = (float)1.0f / sqrtf(_contactNormal._z * _contactNormal._z + _contactNormal._x * _contactNormal._x);
 
 		
 		contactTangent[0]._x = _contactNormal._z * scalingFactor;
@@ -31,7 +31,7 @@ void CollisionContact::CalculateContactBasis()
 	else
 	{
 			//Scaling factor to ensure normalization
-		const float scalingFactor = (float)1.0 / sqrt(_contactNormal._z * _contactNormal._z + _contactNormal._y * _contactNormal._y);
+		const float scalingFactor = (float)1.0 / sqrtf(_contactNormal._z * _contactNormal._z + _contactNormal._y * _contactNormal._y);
 
 		//X acis at right angles to the world's X axis
 		contactTangent[0]._x = 0;
@@ -114,9 +114,9 @@ Vector CollisionContact::CalculateFrictionImpulse(Matrix3x3* inverseInertiaTenso
 
 		//Calculate velocity change matrix
 		Matrix3x3 deltaVelocityWorldBody2 = impulseToTorque;
-		deltaVelocityWorld *= inverseInertiaTensor[1];
-		deltaVelocityWorld *= impulseToTorque;
-		deltaVelocityWorld *= -1;
+		deltaVelocityWorldBody2 *= inverseInertiaTensor[1];
+		deltaVelocityWorldBody2 *= impulseToTorque;
+		deltaVelocityWorldBody2 *= -1;
 
 		//Add to total delta velocity
 		deltaVelocityWorld += deltaVelocityWorldBody2;
@@ -145,7 +145,7 @@ Vector CollisionContact::CalculateFrictionImpulse(Matrix3x3* inverseInertiaTenso
 	contactImpulse = impulseMatrix.transform(cancelVelocities);
 
 	//Check for exeeding friction ammounts
-	float planarImpulse = sqrt(contactImpulse._y * contactImpulse._y + contactImpulse._z * contactImpulse._z);
+	float planarImpulse = sqrtf(contactImpulse._y * contactImpulse._y + contactImpulse._z * contactImpulse._z);
 
 	if (planarImpulse > contactImpulse._x * _friction)
 	{
@@ -384,7 +384,7 @@ void CollisionContact::CalculateInternals(float deltaTime)
 	_contactVelocity = CalculateLocalVelocity(0, deltaTime);
 	if (body[1])
 	{
-		_contactVelocity = CalculateLocalVelocity(1, deltaTime);
+		_contactVelocity -= CalculateLocalVelocity(1, deltaTime);
 	}
 
 	//Calculate the desired change in velocity 

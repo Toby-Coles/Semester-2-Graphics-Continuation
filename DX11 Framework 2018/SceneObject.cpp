@@ -27,15 +27,7 @@ void SceneObject::Initialise()
 	_transform = new Transform();
 	_appearance = new Appearance();
 
-	if (isRigidBody)
-	{
-		_body = new RigidBody(_transform);
-
-	}
-	else
-	{
-		_particle = new ParticleModel(_transform);
-	}
+	
 	
 
 
@@ -51,6 +43,19 @@ void SceneObject::Initialise()
 	};
 
 
+}
+
+void SceneObject::CreatePhysics()
+{
+	if (isRigidBody)
+	{
+		_body = new RigidBody(_transform);
+
+	}
+	else
+	{
+		_particle = new ParticleModel(_transform);
+	}
 }
 
 void SceneObject::Draw()

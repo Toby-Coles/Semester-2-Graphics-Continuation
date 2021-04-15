@@ -70,10 +70,12 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	//_cube->_body->SetPosition(Vector(0.0f, 0.0f, 10.0f));
 	_cube->_transform->SetPosition(Vector(0.0f, 0.0f, 10.0f));
+	_cube->_transform->SetRotation(Vector(5.0f, 2.0f, 1.0f));
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
+	_cube->CreatePhysics();
 	_cube->_body->SetAwake(true);
-
+	
 	_box1Primitive =  CollisionBox();
 	_box1Primitive._halfSize = Vector(1.0f, 1.0f, 1.0f);
 
@@ -90,10 +92,12 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_cube2->_transform->SetPosition(Vector(0.0f, 0.0f, -10.0f));
 	_cube2->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube2->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
+	_cube2->CreatePhysics();
 	_cube2->_body->SetAwake(true);
+	
 	_box2Primitive = CollisionBox();
 	_box2Primitive.body = _cube2->_body;
-
+	
 	_box2Primitive._halfSize = Vector(1.0f, 1.0f, 1.0f);
 
 	_worldSceneObjects.push_back(_cube2);
@@ -182,12 +186,13 @@ void Application::Update()
 	_box1Primitive.CalculateTransform();
 	_box2Primitive.CalculateTransform();
 
+	_collisionData->restitution = 0.1f;
 	_collisionData->Reset(_maxContacts);
 
 	CollisionDetector::BoxAndBox(_box1Primitive, _box2Primitive, _collisionData);
 	_contactResolver->ResolveContacts(_collisionData->contactArray, _collisionData->contactCount, deltaTime);
 
-
+	
 	/*if (_cube->_transform->GetPosition()->_y <= -10.0f)
 	{
 		_cube->_particle->AddForce(Vector(0.0f, 25.81f, 0.0f));
@@ -390,21 +395,21 @@ void Application::UpdateObjectControlls(float deltaTime) {
 	if (GetAsyncKeyState('T')) {
 		
 		//_cube->_particleModel->MoveConstVelocity(deltaTime);
-		_cube->_body->AddForce(Vector(10.0f, 0.0f, 0.0f));
+		_cube->_body->AddForce(Vector(100.0f, 0.0f, 0.0f));
 	}
 	if (GetAsyncKeyState('Y')) {
 		
-		_cube->_body->AddForce(Vector(-10.0f, 0.0f, 0.0f));
+		_cube->_body->AddForce(Vector(-100.0f, 0.0f, 0.0f));
 	}
 
 	if (GetAsyncKeyState('G')) {
 
 		//_cube->_particleModel->MoveConstVelocity(deltaTime);
-		_cube->_body->AddForce(Vector(0.0f, 0.0f, 10.0f));
+		_cube->_body->AddForce(Vector(0.0f, 0.0f, 100.0f));
 	}
 	if (GetAsyncKeyState('H')) {
 
-		_cube->_body->AddForce(Vector(0.0f, 0.0f, -10.0f));
+		_cube->_body->AddForce(Vector(0.0f, 0.0f, -100.0f));
 	}
 	
 }

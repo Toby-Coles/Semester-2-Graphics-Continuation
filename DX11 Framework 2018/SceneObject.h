@@ -32,6 +32,7 @@ public:
 	void Update(float deltaTime); 
 	void Initialise();
 
+	void CreatePhysics();
 	ParticleModel* GetParticle() const { return _particle; }
 
 	ApplicationGraphics* appGFX;

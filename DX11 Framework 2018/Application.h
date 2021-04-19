@@ -76,7 +76,8 @@ private:
 	ParticleGravity* _particleGravityForce;
 
 	// ======== RigidBody forces ======== //
-	RigidForceRegister* _rigedForces;
+	RigidForceRegister* _rigidForces;
+	RigidGravity* _rigidGravity;
 
 	// ======== Contacts & Collisions ======== //
 	const static unsigned _maxContacts = 256;
@@ -85,8 +86,7 @@ private:
 	CollisionContact _contactArray[_maxContacts];
 
 	
-	CollisionBox
-		_box1Primitive;
+	CollisionBox _box1Primitive;
 	CollisionBox _box2Primitive;
 
 
@@ -107,14 +107,9 @@ private:
 		//Scene Objects
 		std::vector<SceneObject> _applicationObjects;
 
-		float _rotationSpeed;
-		float _earthRotationSpeed;
-
-		float _earthRotation = 0.0f;
-		float _rotation = 0.0f;
 		XMFLOAT3 _offset = XMFLOAT3(0.0f, 3.0f, 5.0f);
 
-		float _moveSpeed;
+		
 
 	public:
 		Application();

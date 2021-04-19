@@ -403,6 +403,7 @@
     <ClCompile Include="ParticleModel.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="RigidBodyForceGenerator.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="SetUpGUI.cpp" />
     <ClCompile Include="Time.cpp" />
@@ -438,6 +439,7 @@
     <CLInclude Include="resource.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="RigidBodyForceGenerator.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="SetUpGUI.h" />
     <ClInclude Include="Structures.h" />

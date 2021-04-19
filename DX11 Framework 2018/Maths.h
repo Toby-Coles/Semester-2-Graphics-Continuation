@@ -237,32 +237,79 @@ public:
 	
 
 	//Sets the matrix to invert based off the given matrix
+	//void SetInverse(const Matrix3x3& m) {
+
+	//	float t1 = m.data[0] * m.data[4];
+	//	float t2 = m.data[0] * m.data[5];
+	//	float t3 = m.data[1] * m.data[3];
+	//	float t4 = m.data[2] * m.data[3];
+	//	float t5 = m.data[1] * m.data[6];
+	//	float t6 = m.data[2] * m.data[6];
+
+	//	// Calculate the determinant.
+	//	float determinant = (t1 * m.data[8] - t2 * m.data[7] - t3 * m.data[8] +
+	//		t4 * m.data[7] + t5 * m.data[5] - t6 * m.data[4]);
+
+	//	// Make sure the determinant is non-zero.
+	//	if (determinant == (float)0.0f) return;
+	//	float invd = (float)1.0f / determinant;
+
+	//	data[0] = (m.data[4] * m.data[8] - m.data[5] * m.data[7]) * invd;
+	//	data[1] = -(m.data[1] * m.data[8] - m.data[2] * m.data[7]) * invd;
+	//	data[2] = (m.data[1] * m.data[5] - m.data[2] * m.data[4]) * invd;
+	//	data[3] = -(m.data[3] * m.data[8] - m.data[5] * m.data[6]) * invd;
+	//	data[4] = (m.data[0] * m.data[8] - t6) * invd;
+	//	data[5] = -(t2 - t4) * invd;
+	//	data[6] = (m.data[3] * m.data[7] - m.data[4] * m.data[6]) * invd;
+	//	data[7] = -(m.data[0] * m.data[7] - t5) * invd;
+	//	data[8] = (t1 - t3) * invd;
+	//}
+
+
 	void SetInverse(const Matrix3x3& m) {
 
-		float t1 = m.data[0] * m.data[4];
-		float t2 = m.data[0] * m.data[5];
-		float t3 = m.data[1] * m.data[3];
-		float t4 = m.data[2] * m.data[3];
-		float t5 = m.data[1] * m.data[6];
-		float t6 = m.data[2] * m.data[6];
+		float t4 = m.data[0] * m.data[4];
+		float t6 = m.data[0] * m.data[5];
+		float t8 = m.data[1] * m.data[3];
+		float t10 = m.data[2] * m.data[3];
+		float t12 = m.data[1] * m.data[6];
+		float t14 = m.data[2] * m.data[6];
 
-		// Calculate the determinant.
-		float determinant = (t1 * m.data[8] - t2 * m.data[7] - t3 * m.data[8] +
-			t4 * m.data[7] + t5 * m.data[5] - t6 * m.data[4]);
+		// Calculate the determinant
+		float t16 = (t4 * m.data[8] - t6 * m.data[7] - t8 * m.data[8] +
+			t10 * m.data[7] + t12 * m.data[5] - t14 * m.data[4]);
 
 		// Make sure the determinant is non-zero.
-		if (determinant == (float)0.0f) return;
-		float invd = (float)1.0f / determinant;
+		if (t16 == (float)0.0f) return;
+		float t17 = 1 / t16;
 
-		data[0] = (m.data[4] * m.data[8] - m.data[5] * m.data[7]) * invd;
-		data[1] = -(m.data[1] * m.data[8] - m.data[2] * m.data[7]) * invd;
-		data[2] = (m.data[1] * m.data[5] - m.data[2] * m.data[4]) * invd;
-		data[3] = -(m.data[3] * m.data[8] - m.data[5] * m.data[6]) * invd;
-		data[4] = (m.data[0] * m.data[8] - t6) * invd;
-		data[5] = -(t2 - t4) * invd;
-		data[6] = (m.data[3] * m.data[7] - m.data[4] * m.data[6]) * invd;
-		data[7] = -(m.data[0] * m.data[7] - t5) * invd;
-		data[8] = (t1 - t3) * invd;
+		data[0] = (m.data[4] * m.data[8] - m.data[5] * m.data[7]) * t17;
+		data[1] = -(m.data[1] * m.data[8] - m.data[2] * m.data[7]) * t17;
+		data[2] = (m.data[1] * m.data[5] - m.data[2] * m.data[4]) * t17;
+		data[3] = -(m.data[3] * m.data[8] - m.data[5] * m.data[6]) * t17;
+		data[4] = (m.data[0] * m.data[8] - t14) * t17;
+		data[5] = -(t6 - t10) * t17;
+		data[6] = (m.data[3] * m.data[7] - m.data[4] * m.data[6]) * t17;
+		data[7] = -(m.data[0] * m.data[7] - t12) * t17;
+		data[8] = (t4 - t8) * t17;
+	}
+
+	void SetCuboidInertiaTensor( Vector& halfSize, float mass) {
+		Vector squares = halfSize.ComponentProduct(halfSize);
+		SetInertiaTensorCoefficients(0.3f * mass * (squares._y + squares._z), 0.3f * mass * (squares._x + squares._z),
+			0.3f * mass * squares._x + squares._y);
+		
+	}
+
+	void SetInertiaTensorCoefficients(float ix, float iy, float iz, float ixy = 0, float ixz = 0, float iyz = 0)
+	{
+		data[0] = ix;
+		data[1] = data[3] = -ixy;
+		data[2] = data[6] = -ixz;
+		data[4] = iy;
+		data[5] = data[7] = -iyz;
+		data[8] = iz;
+
 	}
 
 	Matrix3x3 Inverse()const {
@@ -372,7 +419,7 @@ public:
 	}
 
 	
-	Vector transform(const Vector& vector) const
+	Vector transform(const Vector &vector) const
 	{
 		return (*this) * vector;
 	}

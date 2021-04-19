@@ -89,6 +89,11 @@ Vector CollisionContact::CalculateFrictionlessImpulse(Matrix3x3* inverseInertiaT
 	impulseContact._y = 0;
 	impulseContact._z = 0;
 
+	if (impulseContact._x >= 1000.0f || impulseContact._y >= 1000.0f || impulseContact._x >= 1000.0f)
+	{
+		return Vector(0.0f, 0.0f, 0.0f);
+	}
+
 	return impulseContact;
 }
 
@@ -428,6 +433,8 @@ ContactResolver::ContactResolver(unsigned iterations, float velocityEpsilon, flo
 void ContactResolver::ResolveContacts(CollisionContact* contactArray, unsigned contactCount, float deltaTime)
 {
 	if (contactCount == 0) return;
+
+	
 
 	//Prepare contacts for processing
 	PrepareContacts(contactArray, contactCount, deltaTime);

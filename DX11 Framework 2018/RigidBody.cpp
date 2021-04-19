@@ -2,7 +2,7 @@
 
 RigidBody::RigidBody(Transform* transform)
 {
-	SetMass(10.0);
+	SetMass(40.0f);
 	_accelleration._x = 0.0;  _accelleration._y = 0.0;  _accelleration._z = 0.0;
 	_velocity._x = 0.0;	_velocity._y = 0.0;	_velocity._z = 0.0;
 	_angularDamping = 0.65;
@@ -13,6 +13,8 @@ RigidBody::RigidBody(Transform* transform)
 	
 	//position = *_transform->GetPosition();
 	SetPosition(*_transform->GetPosition());
+
+	SetCuboidInertiaTensor();
 	CalculateDerivedData();
 	ClearAccums();
 	
@@ -238,6 +240,21 @@ void RigidBody::AddForce(const Vector& forceToAdd)
 
 }
 
+void RigidBody::SetCuboidInertiaTensor()
+{
+
+	Vector scale = *_transform->GetScale();
+
+	scale._x /= 2.0f;
+	scale._y /= 2.0f;
+	scale._z /= 2.0f;
+
+	Matrix3x3 cubeTensor;
+	cubeTensor.SetCuboidInertiaTensor(scale, GetMass());
+	SetInertiaTensor(cubeTensor);
+
+}
+
 void RigidBody::ClearAccums()
 {
 	_forceAccum.Clear();
@@ -249,7 +266,7 @@ void RigidBody::ClearAccums()
 void RigidBody::SetMass(const float mass)
 {
 	assert(mass != 0);
-	RigidBody::_inverseMass = ((float)1.0) / mass;
+	RigidBody::_inverseMass = ((float)1.0f) / mass;
 }
 
  void RigidBody::TransformInertiaTensor(Matrix3x3& invInertiaWorld, const Quaternion& q, const Matrix3x3 invertiBody, const Matrix3x4 &rotMatrix) {

@@ -163,6 +163,11 @@ void Vector::ComponentProductUpdate(const Vector& vector)
 	_z *= vector._z;
 }
 
+Vector Vector::ComponentProduct(const Vector& vec)
+{
+	return Vector(_x * vec._z, _y * vec._y, _z * vec._z);
+}
+
 void Vector::Invert()
 {
 	_x = -_x;

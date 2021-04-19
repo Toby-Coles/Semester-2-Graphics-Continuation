@@ -41,13 +41,14 @@ public:
 	Transform* _transform;
 	Appearance* _appearance;
 	ParticleModel* _particle;
+	bool isRigidBody;
 	
 private:
 	float _deltaTime;
-	bool isRigidBody;
+	
 
-
-	ParticleForceRegister* _forces;
+	RigidForceRegister* _rigidForces;
+	ParticleForceRegister* _particleForces;
 	ParticleGravity* _gravity;
 
 protected:

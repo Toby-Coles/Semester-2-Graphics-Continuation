@@ -50,6 +50,7 @@ public:
 
 	void AddScaledVector(const Vector& vector, float scale);
 	void ComponentProductUpdate(const Vector& vector);
+	Vector ComponentProduct(const Vector& vec);
 
 	void Invert();
 	void Clear();

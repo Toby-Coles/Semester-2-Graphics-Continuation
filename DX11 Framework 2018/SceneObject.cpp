@@ -89,6 +89,7 @@ void SceneObject::Update(float deltaTime)
 	if (isRigidBody)
 	{
 		_body->Update(deltaTime);
+		
 	}
 	else
 	{

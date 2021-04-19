@@ -118,6 +118,9 @@
     <ClInclude Include="FineCollision.h">
       <Filter>Collision Detection</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Framework Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="FineCollision.cpp">
       <Filter>Collision Detection</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Framework Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

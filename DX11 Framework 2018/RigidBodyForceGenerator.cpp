@@ -20,7 +20,8 @@ void RigidGravity::UpdateForce(RigidBody* body, float deltaTime) {
 
 	if (body->GetMass() <= 0) return;
 
-	body->AddForce(_gravity * body->GetMass());
+	//Default Cube Mass
+	body->AddForce(_gravity * 40.0f/*body->GetMass()*/);
 
 }
 

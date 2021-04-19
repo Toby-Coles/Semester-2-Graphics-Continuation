@@ -37,11 +37,15 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	
 	//Set up force registry and define forces
 	_particleForces = new ParticleForceRegister();
+	_rigidForces = new RigidForceRegister();
 	_gravity = Vector(0.0, -9.81f, 0.0f);
 	k1 = 0.487f;
 	k2 = 0.8f;
 
+	
 	_particleGravityForce = new ParticleGravity(_gravity);
+	_rigidGravity = new RigidGravity(_gravity);
+
 	_dragForce = new ParticleDrag(k1, k2);
 	//_gravityForce = new ParticleGravity(_gravity);
 	
@@ -70,11 +74,12 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	//_cube->_body->SetPosition(Vector(0.0f, 0.0f, 10.0f));
 	_cube->_transform->SetPosition(Vector(0.0f, 0.0f, 10.0f));
-	_cube->_transform->SetRotation(Vector(5.0f, 2.0f, 1.0f));
+	_cube->_transform->SetRotation(Vector(0.0f, 0.0f, 0.0f));
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_cube->CreatePhysics();
 	_cube->_body->SetAwake(true);
+	_rigidForces->Add(_cube->_body, _rigidGravity);
 	
 	_box1Primitive =  CollisionBox();
 	_box1Primitive._halfSize = Vector(1.0f, 1.0f, 1.0f);
@@ -89,7 +94,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_cube2 = new SceneObject(appGFX, true);
 	_cube2->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	//_cube2->_body->SetPosition(Vector(0.0f, 0.0f, 10.0f));
-	_cube2->_transform->SetPosition(Vector(0.0f, 0.0f, -10.0f));
+	_cube2->_transform->SetPosition(Vector(0.0f, 10.0f, 10.0f));
 	_cube2->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
 	_cube2->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
 	_cube2->CreatePhysics();
@@ -101,7 +106,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_box2Primitive._halfSize = Vector(1.0f, 1.0f, 1.0f);
 
 	_worldSceneObjects.push_back(_cube2);
-	
+	_rigidForces->Add(_cube2->_body, _rigidGravity);
 	
 	_collisionData->contactArray = _contactArray;
 	//_collisionData->contactArray->SetBody(_cube->_body, _cube2->_body, 0.00, 0.00);
@@ -143,12 +148,10 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_timer->Reset();
 	_timer->Start();
 
-	_moveSpeed = 3.0f;
+
 	
 	//Set rotation values
-	_rotation = 0.0f;
-	_rotationSpeed = 0.5f;
-	_earthRotationSpeed = 0.1f;
+	
 	appGFX->SetCamera(_camera1);
 	return S_OK;
 }
@@ -162,10 +165,6 @@ void Application::Update()
 	_timer->Tick();
 	float deltaTime = _timer->DeltaTime();
 
-	//Updates the rotation values so they are constant
-	_rotation += (_rotationSpeed * deltaTime);
-	/*_earthRotation += (_earthRotationSpeed * deltaTime);*/
-
 
 	//Sets the EyePosw for rendering to that of the active camera
 	appGFX->SetEyePosW(appGFX->GetCurrentCamera()->GetCameraPosition());
@@ -173,7 +172,7 @@ void Application::Update()
 	//Update forces acting upon particles 
 	_particleForces->UpdateForces(deltaTime);
 	
-
+	_rigidForces->UpdateForces(deltaTime);
 	
 
 	//Update Scene Objects
@@ -193,10 +192,18 @@ void Application::Update()
 	_contactResolver->ResolveContacts(_collisionData->contactArray, _collisionData->contactCount, deltaTime);
 
 	
-	/*if (_cube->_transform->GetPosition()->_y <= -10.0f)
+	if (_cube->_transform->GetPosition()->_y <= -5.0f)
 	{
-		_cube->_particle->AddForce(Vector(0.0f, 25.81f, 0.0f));
-	}*/
+		//_cube->_body->AddForce(Vector(0.0f, 25.81f, 0.0f));
+		//_cube->_body->SetVelocity(Vector(0.0f, 0.1f, 0.0f));
+		_cube->_body->AddVelocity(Vector(0.0f, -_cube->_body->GetVelocity()._y, 0.0f));
+	}
+	if (_cube2->_transform->GetPosition()->_y <= -5.0f)
+	{
+		//_cube2->_body->SetVelocity(Vector(0.0f, 0.1f, 0.0f));
+		_cube2->_body->AddVelocity(Vector(0.0f, -_cube2->_body->GetVelocity()._y, 0.0f));
+
+	}
 
 
 	//Constantly sets the skymaps position reletive to the active camera to give the illusion of it never moving

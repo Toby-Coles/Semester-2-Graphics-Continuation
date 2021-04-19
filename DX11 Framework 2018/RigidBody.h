@@ -18,6 +18,9 @@ public:
 	
 	void AddForce(const Vector& forceToAdd);
 
+	// ==== Set Inertia Tensors ==== //
+	void SetCuboidInertiaTensor();
+
 	//Adds a given force to a point on the rigid body, both in world space.
 	void AddForceToPoint(const Vector& force, const Vector& point);
 

@@ -12,6 +12,22 @@
 //Enabling the user to easily add and update objects
 //The inherited level files are used to load the levels into the currently active scene
 
+//typedef structure to hold all nececery information to be passed in from the level file 
+struct SceneObjectsToCreate
+{
+	SceneObject* object;
+	CollisionBox* primitive;
+	Vector position;
+	Vector rotation;
+	char* modelPath;
+	wchar_t* texturePath;
+	wchar_t* specularPath;
+	bool usesGravity;
+	bool isRigid;
+
+};
+typedef SceneObjectsToCreate* NewSceneObject;
+
 class Scene
 {
 public:
@@ -20,22 +36,34 @@ public:
 	~Scene();
 
 	// ========== Scene Object Management ========== // 
-	void LoadLevel(std::vector<SceneObject*>objects, std::vector<CollisionBox*>primitives);
+	void LoadLevel(std::vector<SceneObjectsToCreate*>objects);
+
+	//void AddRigidBody(SceneObject* object);
 	void AddRigidBody(SceneObject* object, char* modelPath, wchar_t texturePath, wchar_t specularPath, Vector position, Vector rotation, bool usesGravity);
-	void AddParticle(char name, char modelPath, wchar_t texturePath, Vector position, Vector rotation, bool usesGravity);
+	void AddParticle(SceneObject* object, char* modelPath, wchar_t texturePath, wchar_t specularPath, Vector position, Vector rotation, bool usesGravity);
 	void SetPrimitiveToBodyBox(RigidBody* body, CollisionBox* box); 
 	
+	//Called in child classes: Will prepare and send  scene objects required for current scene 
+	virtual std::vector<SceneObjectsToCreate*> CreateLevel();
+
 	void Update(float deltaTime);
 	void UnloadScene();
 
 	// ========== Collisions ========== // 
 	void ConfigureCollisionSystems();
-	void UpdateCollisionData();
+	void UpdateCollisions();
 
+	// ========== Controls ========== // 
+	void UpdateMoveControlls();
 
+	
 
 private:
+
+
 	ApplicationGraphics* _graphics;
+	int _currentScene;
+
 
 	// ======== Scene Vectors ======== // 
 	std::vector<SceneObject*> _sceneObjects; 

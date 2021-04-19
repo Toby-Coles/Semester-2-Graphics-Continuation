@@ -16,13 +16,14 @@
 #include "RigidBodyForceGenerator.h"
 
 #include <vector>
+#include "FineCollision.h"
 
 using namespace DirectX;
 
 class SceneObject
 {
 public:
-	SceneObject(ApplicationGraphics* graphics, bool isRigid);
+	SceneObject(ApplicationGraphics* graphics);
 	SceneObject();
 	~SceneObject();
 
@@ -41,6 +42,7 @@ public:
 	Transform* _transform;
 	Appearance* _appearance;
 	ParticleModel* _particle;
+    CollisionBox* _colliderBox;
 	bool isRigidBody;
 	
 private:

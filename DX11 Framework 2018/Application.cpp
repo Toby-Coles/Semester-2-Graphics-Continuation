@@ -70,7 +70,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_worldSceneObjects.push_back(_cube);*/
 
 	//RIGID TEST//
-	_cube = new SceneObject(appGFX, true);
+	_cube = new SceneObject(appGFX);
 	_cube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	//_cube->_body->SetPosition(Vector(0.0f, 0.0f, 10.0f));
 	_cube->_transform->SetPosition(Vector(0.0f, 0.0f, 10.0f));
@@ -91,7 +91,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	//_contactArray->body[0] = _cube->_body;
 	
 
-	_cube2 = new SceneObject(appGFX, true);
+	_cube2 = new SceneObject(appGFX);
 	_cube2->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
 	//_cube2->_body->SetPosition(Vector(0.0f, 0.0f, 10.0f));
 	_cube2->_transform->SetPosition(Vector(0.0f, 10.0f, 10.0f));
@@ -109,19 +109,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	_rigidForces->Add(_cube2->_body, _rigidGravity);
 	
 	_collisionData->contactArray = _contactArray;
-	//_collisionData->contactArray->SetBody(_cube->_body, _cube2->_body, 0.00, 0.00);
 
-	/*_particleForces->Add(_cube->GetParticle(), _particleGravityForce);
-	_particleForces->Add(_cube->GetParticle(), _dragForce);*/
-
-	/*_launchCube = new SceneObject(appGFX);
-	_launchCube->_appearance->LoadModelMesh("Models/cube.obj", appGFX->GetDevice());
-	_launchCube->_transform->SetPosition(0.0f, -10.0f, 5.0f);
-	_launchCube->_transform->SetScale(1.0f, 1.0f, 1.0f);
-	_launchCube->_transform->SetRotation(0.1f, 0.1f, 0.1f);
-	_launchCube->_appearance->GenerateTexture(L"Textures/Crate_COLOR.dds", appGFX->GetDevice());
-	_launchCube->_appearance->GenerateTexture(L"Textures/Crate_SPEC.dds", appGFX->GetDevice());
-	_worldSceneObjects.push_back(_cube);*/
 
 	//Initialise the view matrix for the camera
 	_camera1->UpdateViewMatrix();
@@ -174,7 +162,10 @@ void Application::Update()
 	
 	_rigidForces->UpdateForces(deltaTime);
 	
-
+	
+	_box1Primitive.CalculateTransform();
+	_box2Primitive.CalculateTransform();
+	
 	//Update Scene Objects
 	for each (SceneObject * object in _worldSceneObjects)
 	{
@@ -182,15 +173,15 @@ void Application::Update()
 		//object->_particle->IntergrateMovement(deltaTime);
 	}
 
-	_box1Primitive.CalculateTransform();
-	_box2Primitive.CalculateTransform();
+	
 
-	_collisionData->restitution = 0.1f;
+	_collisionData->restitution = 0.2f;
 	_collisionData->Reset(_maxContacts);
 
 	CollisionDetector::BoxAndBox(_box1Primitive, _box2Primitive, _collisionData);
 	_contactResolver->ResolveContacts(_collisionData->contactArray, _collisionData->contactCount, deltaTime);
 
+	
 	
 	if (_cube->_transform->GetPosition()->_y <= -5.0f)
 	{

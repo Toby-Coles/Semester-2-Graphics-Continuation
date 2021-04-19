@@ -30,6 +30,9 @@
     <Filter Include="Collision Detection">
       <UniqueIdentifier>{63b4ea41-d537-4e50-8a4a-bcff5dc6056b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Levels">
+      <UniqueIdentifier>{c3d82f80-8c7d-4d8a-9c3d-5f50b3e5018b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Imgui\imconfig.h">
@@ -121,6 +124,9 @@
     <ClInclude Include="Scene.h">
       <Filter>Framework Core</Filter>
     </ClInclude>
+    <ClInclude Include="Level1.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Imgui\imgui.cpp">
@@ -206,6 +212,7 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Framework Core</Filter>
     </ClCompile>
+    <ClCompile Include="Level1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">

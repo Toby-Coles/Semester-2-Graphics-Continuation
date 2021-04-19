@@ -1,10 +1,10 @@
 #include "SceneObject.h"
 
-SceneObject::SceneObject (ApplicationGraphics* graphics, bool isRigid) {
+SceneObject::SceneObject (ApplicationGraphics* graphics) {
 
 	
 	this->appGFX = graphics;
-	isRigidBody = isRigid;
+	
 
 
 	Initialise();
@@ -50,10 +50,12 @@ void SceneObject::CreatePhysics()
 	if (isRigidBody)
 	{
 		_body = new RigidBody(_transform);
+		isRigidBody = true;
 
 	}
 	else
 	{
+		isRigidBody = false;
 		_particle = new ParticleModel(_transform);
 	}
 }

@@ -76,11 +76,12 @@ void Vector::operator/=(float value)
 	
 }
 
+//Vector product
 Vector Vector::operator%(const Vector& vector)
 {
 	return Vector(_y * vector._z - _z * vector._y,
-		_z * vector._x - _x * vector._z,
-		_x * vector._y - _y * vector._x);
+					_z * vector._x - _x * vector._z,
+					_x * vector._y - _y * vector._x);
 }
 
 void Vector::operator%=(const Vector& vector)

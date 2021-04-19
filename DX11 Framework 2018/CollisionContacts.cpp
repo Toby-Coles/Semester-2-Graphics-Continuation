@@ -84,7 +84,7 @@ Vector CollisionContact::CalculateFrictionlessImpulse(Matrix3x3* inverseInertiaT
 		deltaVelocity += body[1]->GetInverseMass();
 	}
 
-	//Calculate required impulse size
+	//Calculate impulse size
 	impulseContact._x = _desiredDeltaVelocity / deltaVelocity;
 	impulseContact._y = 0;
 	impulseContact._z = 0;
@@ -299,16 +299,19 @@ void CollisionContact::ApplyNonlinearProjection(Vector linearChange[2], Vector a
 		//Linear component is inverse mass
 		linearInertia[i] = body[i]->GetInverseMass();
 
+
 		//Keep track of the total inertia
 		totalInertia += linearInertia[i] + angularInertia[i];
 	}
 
 	//loop through again to calculate and apply changes
-	for (unsigned i = 0; i < 2; i++) if (body[i])
+	for (unsigned i = 0; i < 2; i++) /*if (body[i])*/
 	{
 		float sign = (i == 0) ? 1 : -1;
+	
 		angular[i] = sign * penetration * (angularInertia[i] / totalInertia);
 		linear[i] = sign * penetration * (linearInertia[i] / totalInertia);
+		
 
 		//To avoid too great of angular projections, limit angular move
 		Vector projection = _relativeContactPos[i];
@@ -355,7 +358,8 @@ void CollisionContact::ApplyNonlinearProjection(Vector linearChange[2], Vector a
 		Vector pos;
 		body[i]->GetPosition(&pos);
 		pos.AddScaledVector(_contactNormal, linear[i]);
-		body[i]->SetPosition(pos);
+		
+		body[i]->SetPosition(pos + linearChange[i]);
 
 		//Change orientation
 		Quaternion q;
@@ -363,6 +367,7 @@ void CollisionContact::ApplyNonlinearProjection(Vector linearChange[2], Vector a
 		q.addScaledVector(angularChange[i], ((float)1.0f));
 		body[i]->SetOrientation(q);
 
+		
 		//Calculate the derived data for any body which is asleep, so the changes are reflected in the objects data. 
 		if (!body[i]->GetAwake()) body[i]->CalculateDerivedData();
 
@@ -507,10 +512,10 @@ void ContactResolver::AdjustPositions(CollisionContact* contactArray, unsigned c
 				}
 			}
 		}
-
+		_positionIterationsUsed++;
 	}
 
-	_positionIterationsUsed++;
+	
 }
 
 void ContactResolver::AdjustVelocities(CollisionContact* contactArray, unsigned contactCount, float deltaTime)

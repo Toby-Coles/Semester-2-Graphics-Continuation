@@ -2,7 +2,7 @@
 
 RigidBody::RigidBody(Transform* transform)
 {
-	SetMass(40.0f);
+	SetMass(20.0f);
 	_accelleration._x = 0.0;  _accelleration._y = 0.0;  _accelleration._z = 0.0;
 	_velocity._x = 0.0;	_velocity._y = 0.0;	_velocity._z = 0.0;
 	_angularDamping = 0.65;
